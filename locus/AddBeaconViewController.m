@@ -12,7 +12,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *pictureBeacon;
 @property (weak, nonatomic) IBOutlet UITextField *nameBeacon;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionBeacon;
-- (IBAction)choosePicButton:(id)sender;
+- (IBAction)editPressed:(id)sender;
 
 @property (nonatomic) UIImagePickerController *imagePickerController;
 @property (nonatomic) NSMutableArray *capturedImages;
@@ -20,6 +20,8 @@
 
 @property UITextField *activeField;
 @property UITextView *activeView;
+
+@property UIActionSheet* attachmentMenuSheet;
 
 
 @end
@@ -94,14 +96,52 @@
 
 #pragma mark - Choose image from camera or from library
 
-//Right now only library function is integrated because we can't test camera with the simulator
+- (IBAction)editPressed:(id)sender{
+    [self createUIActionSheet];
+}
+
+- (void)createUIActionSheet {
+    
+    _attachmentMenuSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                         destructiveButtonTitle:nil
+                                              otherButtonTitles:@"Choose from Gallery", @"Take Photo", nil];
+    
+    // Show the sheet
+    [_attachmentMenuSheet showInView:[UIApplication sharedApplication].keyWindow];
+    //[_attachmentMenuSheet showFromRect:attachmentRect inView:textView animated:YES];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (actionSheet == _attachmentMenuSheet) {
+        //FLOG(@"Button %d", buttonIndex);
+        switch (buttonIndex) {
+                
+            case 0:
+                //FLOG(@" Choose from Gallery");
+                [self choosePicButton];
+                break;
+                
+            case 1:
+                //FLOG(@"  Save to Camera Roll");
+                [self clickPicButton];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+
 /*Function to pick images for the gallery*/
-- (IBAction)choosePicButton:(id)sender {
+- (void)choosePicButton {
     [self showImagePickerForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
 }
 
 /*Function to click picture from the camera*/
-- (IBAction)clickPicButton:(id)sender {
+- (void)clickPicButton {
     [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
 }
 

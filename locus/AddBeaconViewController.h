@@ -12,7 +12,7 @@
 #import "AppDelegate.h"
 #import "Items.h"
 
-@interface AddBeaconViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate>
+@interface AddBeaconViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIActionSheetDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *tfRange;
 @property (weak, nonatomic) IBOutlet UIStepper *rangeCounter;
 @property (weak, nonatomic) IBOutlet UIButton *addButton;
