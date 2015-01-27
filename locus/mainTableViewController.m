@@ -11,6 +11,8 @@
 @interface mainTableViewController ()
 @property NSInteger totalItems;
 @property NSInteger itemsLoaded;
+@property UIImage *beaconImageDetail;
+@property NSString *beaconNameDetail;
 @end
 
 @implementation mainTableViewController
@@ -95,6 +97,19 @@
         transferViewController.user_name = self.user_name;
         NSLog(@"%@", transferViewController.user_name);
     }
+    if([[segue identifier] isEqualToString:@"BeaconDetailSegue"]){
+        NSLog(@"Prepare for segue: %@", segue.identifier);
+        UITabBarController *segueNavigation = [segue destinationViewController];
+        NSLog(@"%@",[[segueNavigation viewControllers] objectAtIndex:1]);
+        UINavigationController *navController = (UINavigationController *)[[segueNavigation viewControllers] objectAtIndex:0];
+        TrackViewController *transferViewController = (TrackViewController *)[[navController viewControllers] objectAtIndex:0];
+        transferViewController.user_name = self.user_name;
+        NSLog(@"%@", transferViewController.user_name);
+        transferViewController.beaconName = self.beaconNameDetail;
+        NSLog(@"Name OK, %@",transferViewController.beaconName);
+        transferViewController.beaconImage = self.beaconImageDetail;
+    }
+    
 }
 
 #pragma mark - Loading from databases
@@ -518,6 +533,14 @@
     cell.selectedBackgroundView = [UIView new];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BeaconTableViewCell *curItem = (BeaconTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    self.beaconImageDetail = curItem.thumbnailImage.image;
+    self.beaconNameDetail = curItem.nameLabel.text;
+    [self performSegueWithIdentifier:@"BeaconDetailSegue" sender:self];
 }
 
 /*

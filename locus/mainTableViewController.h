@@ -17,6 +17,7 @@
 #import "ImageDownloader.h"
 #import "PendingOperations.h"
 #import "AFNetworking.h"
+#import "TrackViewController.h"
 
 @interface mainTableViewController : UITableViewController <ImageDownloaderDelegate>
 - (IBAction) unwindToList:(UIStoryboardSegue *) segue;
