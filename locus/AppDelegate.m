@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Items.h"
+#include "Beacon.h"
 #include "Users.h"
 #include "mainTableViewController.h"
 
@@ -136,6 +137,7 @@
     
     NSFetchRequest *request1 = [NSFetchRequest fetchRequestWithEntityName:@"Users"];
     NSFetchRequest *request2 = [NSFetchRequest fetchRequestWithEntityName:@"Items"];
+    NSFetchRequest *request3 = [NSFetchRequest fetchRequestWithEntityName:@"Beacon"];
     
     //For sorting the data based on an item_key
     //NSSortDescriptor *sort =[NSSortDescriptor sortDescriptorWithKey:@"item_name" ascending:YES];
@@ -147,6 +149,13 @@
     
     NSArray *fetchedObjects1 = [_coreDataHelper.managedObjectContext executeFetchRequest:request1 error:nil];
     NSArray *fetchedObjects2 = [_coreDataHelper.managedObjectContext executeFetchRequest:request2 error:nil];
+    NSArray *fetchedObjects3 = [_coreDataHelper.managedObjectContext executeFetchRequest:request3 error:nil];
+    
+    for(Beacon *beacon in fetchedObjects3){
+        NSLog(@"Fetched Object = %@",beacon.item_name);
+        //For deleting an object
+        [_coreDataHelper.managedObjectContext deleteObject:beacon];
+    }
     
     for(Items *item in fetchedObjects2){
         NSLog(@"Fetched Object = %@",item.item_name);

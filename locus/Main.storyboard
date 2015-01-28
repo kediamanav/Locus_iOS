@@ -93,19 +93,6 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="login_bg" translatesAutoresizingMaskIntoConstraints="NO" id="7bs-qg-yJD">
                                 <rect key="frame" x="0.0" y="55" width="375" height="612"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YMw-0t-HLx">
-                                <rect key="frame" x="144" y="556" width="86" height="36"/>
-                                <color key="backgroundColor" red="0.46308718775065394" green="0.72883694240921293" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
-                                <state key="normal" title="Save">
-                                    <color key="titleColor" red="0.14776310402202208" green="0.28156887755102045" blue="0.11860967322026014" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="saveButton:" destination="C7y-Ty-Nri" eventType="touchUpInside" id="Jx8-hs-F3q"/>
-                                    <action selector="savePressed:" destination="C7y-Ty-Nri" eventType="touchUpInside" id="cvH-dy-Gvm"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="E-Leash : " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Esn-8F-6hp">
                                 <rect key="frame" x="42" y="85" width="107" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
@@ -180,6 +167,18 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YMw-0t-HLx">
+                                <rect key="frame" x="144" y="556" width="86" height="36"/>
+                                <color key="backgroundColor" red="0.46308718775065394" green="0.72883694240921293" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title="Save">
+                                    <color key="titleColor" red="0.14776310402202208" green="0.28156887755102045" blue="0.11860967322026014" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="savePressed:" destination="C7y-Ty-Nri" eventType="touchUpInside" id="Czl-En-wxu"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -198,7 +197,7 @@
                         <outlet property="label3" destination="tgS-GO-auv" id="dn8-ea-7Iy"/>
                         <outlet property="label4" destination="LaL-Yh-pDL" id="bJ2-t5-LVs"/>
                         <outlet property="messageView" destination="XMZ-ES-mfv" id="FK6-sM-7i3"/>
-                        <outlet property="saveButton" destination="YMw-0t-HLx" id="AMQ-Ej-TZN"/>
+                        <outlet property="saveButton" destination="YMw-0t-HLx" id="s9Z-uB-ahe"/>
                         <outlet property="switchOn" destination="hRl-3m-EMK" id="TpA-4d-o9b"/>
                         <segue destination="ZMp-mE-ecv" kind="show" identifier="ShowEventSegue" id="Ih4-qT-Zi3"/>
                         <segue destination="BJO-rW-KeB" kind="show" identifier="ShowActionSegue" id="S4E-Gy-gXi"/>
@@ -344,11 +343,8 @@
                                     <action selector="pressCamera:" destination="Ip2-6S-DK4" eventType="touchUpInside" id="5DS-JU-VKp"/>
                                 </connections>
                             </button>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sf8-kE-siA">
-                                <rect key="frame" x="0.0" y="179" width="381" height="439"/>
-                            </mapView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="OC8-97-cgM">
                         <barButtonItem key="leftBarButtonItem" title="Back" id="yV7-rU-AZv">
@@ -359,7 +355,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="beaconImageHolder" destination="YfA-zD-7CN" id="JEn-sg-eFw"/>
-                        <outlet property="mapView" destination="sf8-kE-siA" id="Gi3-R0-F03"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Z5-VP-ed8" userLabel="First Responder" sceneMemberID="firstResponder"/>

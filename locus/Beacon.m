@@ -2,7 +2,7 @@
 //  Beacon.m
 //  locus
 //
-//  Created by Manav Kedia on 27/01/15.
+//  Created by Manav Kedia on 28/01/15.
 //  Copyright (c) 2015 Manav Kedia. All rights reserved.
 //
 
@@ -11,13 +11,14 @@
 
 @implementation Beacon
 
-@dynamic user_name;
-@dynamic item_name;
 @dynamic action;
 @dynamic event;
+@dynamic item_name;
 @dynamic major;
-@dynamic minor;
-@dynamic uuid;
 @dynamic message;
+@dynamic minor;
+@dynamic user_name;
+@dynamic uuid;
+@dynamic modified;
 
 @end

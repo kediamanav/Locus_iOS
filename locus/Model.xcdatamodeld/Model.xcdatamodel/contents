@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Beacon" representedClassName="Beacon" syncable="YES">
-        <attribute name="action" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="event" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="action" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="event" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="item_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="major" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="minor" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="modified" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="user_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -32,8 +33,8 @@
         <attribute name="user_password" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
+        <element name="Beacon" positionX="-63" positionY="81" width="128" height="178"/>
         <element name="Items" positionX="-63" positionY="-18" width="128" height="240"/>
         <element name="Users" positionX="-63" positionY="72" width="128" height="105"/>
-        <element name="Beacon" positionX="-63" positionY="81" width="128" height="30"/>
     </elements>
 </model>

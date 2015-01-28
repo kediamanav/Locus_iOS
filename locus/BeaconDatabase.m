@@ -48,44 +48,7 @@
     }
 }
 
-- (void) addNewBeacon:(Beacon *)beacon{
-    NSLog(@"AddNewBeacon");
-    NSLog(@"uuid: %@",beacon.uuid);
-    
-    NSManagedObjectContext *context = [self managedObjectContext];
-    NSEntityDescription *entityDesc = [NSEntityDescription entityForName:@"Beacon" inManagedObjectContext:context];
-    NSFetchRequest *request = [[NSFetchRequest alloc]init];
-    [request setEntity:entityDesc];
-    NSPredicate *predSearch = [NSPredicate predicateWithFormat:@"(uuid = %@) AND (major = %@) AND (minor = %@)"
-                               ,beacon.uuid,beacon.major,beacon.minor];
-    [request setPredicate:predSearch];
-    NSError *error;
-    Beacon *existingBeacon = [[context executeFetchRequest:request error:&error]lastObject];
-    if (existingBeacon) {
-        NSLog(@"Cant add beacon. it is already present");
-    }
-    else {
-        /*Beacon *newBeacon = (Beacon *)[NSEntityDescription insertNewObjectForEntityForName:@"Beacon" inManagedObjectContext:context];
-        [newBeacon setValue:beacon.uuid forKey:@"uuid"];
-        [newBeacon setValue:beacon.item_name forKey:@"item_name"];
-        [newBeacon setValue:beacon.user_name forKey:@"user_name"];
-        [newBeacon setValue:beacon.major forKey:@"major"];
-        [newBeacon setValue:beacon.minor forKey:@"minor"];
-        [newBeacon setValue:beacon.event forKey:@"event"];
-        [newBeacon setValue:beacon.action forKey:@"action"];
-        [newBeacon setValue:beacon.message forKey:@"message"];*/
-        
-        NSError *saveError;
-        if (![context save:&saveError]) {
-            NSLog(@"Error adding Beacon in Phone");
-        }
-        else {
-            NSLog(@"Beacon is added in Phone");
-        }
-    }
-}
-
-- (void) updateBeacon:(Beacon *)beacon{
+- (int) updateBeacon:(Beacon *)beacon{
     //Check if UUID+Major+Minor combination already exist in database
     NSManagedObjectContext *_context = [self managedObjectContext];
     NSEntityDescription *entityDesc = [NSEntityDescription entityForName:@"Beacon" inManagedObjectContext:_context];
@@ -119,13 +82,14 @@
             }
             else {
                 NSLog(@"Beacon is updated in Phone");
+                return 1;
             }
         }
     }
     else {
         NSLog(@"No matching Beacon has found in database");
     }
-
+    return 0;
 }
 
 - (Beacon *) readBeacon: (NSString *)username : (NSString *) itemname{

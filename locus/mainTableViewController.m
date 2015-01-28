@@ -105,11 +105,10 @@
         TrackViewController *transferViewController = (TrackViewController *)[[navController viewControllers] objectAtIndex:0];
         transferViewController.user_name = self.user_name;
         NSLog(@"%@", transferViewController.user_name);
-        transferViewController.beaconName = self.beaconNameDetail;
-        NSLog(@"Name OK, %@",transferViewController.beaconName);
+        transferViewController.item_name = self.beaconNameDetail;
+        NSLog(@"Name OK, %@",transferViewController.item_name);
         transferViewController.beaconImage = self.beaconImageDetail;
     }
-    
 }
 
 #pragma mark - Loading from databases

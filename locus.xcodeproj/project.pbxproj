@@ -15,13 +15,13 @@
 		5008E9221A77E7DD00189481 /* BeaconData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E9211A77E7DD00189481 /* BeaconData.m */; };
 		5008E9251A77E9C400189481 /* ActionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E9241A77E9C400189481 /* ActionTableViewCell.m */; };
 		5008E9271A77FCCD00189481 /* Monalisa.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008E9261A77FCCD00189481 /* Monalisa.png */; };
-		5008E92A1A78097600189481 /* Beacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E9291A78097600189481 /* Beacon.m */; };
 		5008E92D1A7809AD00189481 /* BeaconDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E92C1A7809AD00189481 /* BeaconDatabase.m */; };
 		500DE8771A7576EA0095BD9C /* TrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 500DE8761A7576EA0095BD9C /* TrackViewController.m */; };
 		500DE87A1A758AA20095BD9C /* 2-23-030_HMA121.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE8781A758AA20095BD9C /* 2-23-030_HMA121.png */; };
 		500DE87B1A758AA20095BD9C /* camera-iphone-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE8791A758AA20095BD9C /* camera-iphone-icon.png */; };
 		500DE87D1A758C0F0095BD9C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 500DE87C1A758C0F0095BD9C /* MapKit.framework */; };
 		500DE87F1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE87E1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png */; };
+		5011E8211A7939F900716065 /* Beacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5011E8201A7939F900716065 /* Beacon.m */; };
 		5014E9B71A77AE0B003F4ACC /* Alarm.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B11A77AE0B003F4ACC /* Alarm.png */; };
 		5014E9B81A77AE0B003F4ACC /* ImmediateRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */; };
 		5014E9B91A77AE0B003F4ACC /* InRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B31A77AE0B003F4ACC /* InRange.png */; };
@@ -123,9 +123,7 @@
 		5008E9211A77E7DD00189481 /* BeaconData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconData.m; sourceTree = "<group>"; };
 		5008E9231A77E9C400189481 /* ActionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionTableViewCell.h; sourceTree = "<group>"; };
 		5008E9241A77E9C400189481 /* ActionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionTableViewCell.m; sourceTree = "<group>"; };
-		5008E9261A77FCCD00189481 /* Monalisa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Monalisa.png; path = locus/Resources/Images/Monalisa.png; sourceTree = "<group>"; };
-		5008E9281A78097600189481 /* Beacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Beacon.h; sourceTree = "<group>"; };
-		5008E9291A78097600189481 /* Beacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Beacon.m; sourceTree = "<group>"; };
+		5008E9261A77FCCD00189481 /* Monalisa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Monalisa.png; sourceTree = "<group>"; };
 		5008E92B1A7809AD00189481 /* BeaconDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconDatabase.h; sourceTree = "<group>"; };
 		5008E92C1A7809AD00189481 /* BeaconDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconDatabase.m; sourceTree = "<group>"; };
 		500DE8751A7576EA0095BD9C /* TrackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackViewController.h; sourceTree = "<group>"; };
@@ -134,6 +132,8 @@
 		500DE8791A758AA20095BD9C /* camera-iphone-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "camera-iphone-icon.png"; path = "../../../../../../Downloads/camera-iphone-icon.png"; sourceTree = "<group>"; };
 		500DE87C1A758C0F0095BD9C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		500DE87E1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "yellow-exclamation-mark-in-triangle-hi.png"; path = "../../../../../../Downloads/yellow-exclamation-mark-in-triangle-hi.png"; sourceTree = "<group>"; };
+		5011E81F1A7939F900716065 /* Beacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Beacon.h; sourceTree = "<group>"; };
+		5011E8201A7939F900716065 /* Beacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Beacon.m; sourceTree = "<group>"; };
 		5014E9B11A77AE0B003F4ACC /* Alarm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Alarm.png; sourceTree = "<group>"; };
 		5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImmediateRange.png; sourceTree = "<group>"; };
 		5014E9B31A77AE0B003F4ACC /* InRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InRange.png; sourceTree = "<group>"; };
@@ -278,7 +278,6 @@
 		502018FC1A712D9100C4442A = {
 			isa = PBXGroup;
 			children = (
-				5008E9261A77FCCD00189481 /* Monalisa.png */,
 				502019071A712D9100C4442A /* locus */,
 				502019341A712EB300C4442A /* Frameworks */,
 				502019211A712D9100C4442A /* locusTests */,
@@ -411,8 +410,8 @@
 			isa = PBXGroup;
 			children = (
 				50201D8F1A71399E00C4442A /* Model.xcdatamodeld */,
-				5008E9281A78097600189481 /* Beacon.h */,
-				5008E9291A78097600189481 /* Beacon.m */,
+				5011E81F1A7939F900716065 /* Beacon.h */,
+				5011E8201A7939F900716065 /* Beacon.m */,
 				50201D261A7131CF00C4442A /* Users.h */,
 				50201D271A7131CF00C4442A /* Users.m */,
 				50201D131A7131CF00C4442A /* Items.h */,
@@ -486,6 +485,7 @@
 		50201D921A713EF200C4442A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5008E9261A77FCCD00189481 /* Monalisa.png */,
 				5014E9B11A77AE0B003F4ACC /* Alarm.png */,
 				5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */,
 				5014E9B31A77AE0B003F4ACC /* InRange.png */,
@@ -682,7 +682,6 @@
 				50201D361A7131CF00C4442A /* SignUpViewController.m in Sources */,
 				50201D621A71349700C4442A /* NSObject+SBJson.m in Sources */,
 				500DE8771A7576EA0095BD9C /* TrackViewController.m in Sources */,
-				5008E92A1A78097600189481 /* Beacon.m in Sources */,
 				50201D2B1A7131CF00C4442A /* BeaconTableViewCell.m in Sources */,
 				5020190B1A712D9100C4442A /* main.m in Sources */,
 				50201D301A7131CF00C4442A /* ItemUploader.m in Sources */,
@@ -701,6 +700,7 @@
 				50201D821A71357200C4442A /* AFHTTPRequestOperation.m in Sources */,
 				50201D671A71349700C4442A /* SBJsonStreamParserState.m in Sources */,
 				5008E9221A77E7DD00189481 /* BeaconData.m in Sources */,
+				5011E8211A7939F900716065 /* Beacon.m in Sources */,
 				50201D461A7133E400C4442A /* mainTableViewController.m in Sources */,
 				50201D351A7131CF00C4442A /* scanBeaconViewController.m in Sources */,
 			);

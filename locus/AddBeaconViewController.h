@@ -19,6 +19,10 @@
 @property NSString *user_name;
 @property NSString *macAddress;
 
+@property NSString *major;
+@property NSString *minor;
+@property NSUUID *uuid;
+
 - (IBAction)counterPressed:(id)sender;
 - (IBAction)addButtonPressed:(id)sender;
 

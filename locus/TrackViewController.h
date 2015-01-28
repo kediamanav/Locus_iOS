@@ -7,14 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#include <MapKit/MapKit.h>
 
-@interface TrackViewController : UIViewController <CLLocationManagerDelegate>
+@interface TrackViewController : UIViewController <UITabBarControllerDelegate>
 
-@property NSString *user_name;
-@property (strong) NSString *beaconName;
+@property (strong, nonatomic) NSString *user_name;
+@property (strong, nonatomic) NSString *item_name;
 @property (strong, nonatomic) IBOutlet UIImage *beaconImage;
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end

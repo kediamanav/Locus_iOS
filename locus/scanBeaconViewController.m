@@ -12,6 +12,10 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *scanner;
 @property (weak, nonatomic) IBOutlet UITableView *beaconTable;
 @property (weak, nonatomic) IBOutlet UILabel *headerText;
+@property NSUUID *uuid;
+@property NSString *major;
+@property NSString *minor;
+
 
 @end
 
@@ -21,6 +25,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.uuid = [[NSUUID alloc] initWithUUIDString:@"01122334-4556-6778-899A-ABBCCDDEEFF0"];
+    self.major = @"0";
+    self.minor = @"0";
+    
     [self.beaconTable setHidden:YES];
     
     self.beaconTable.backgroundColor = [UIColor clearColor];
@@ -59,8 +67,15 @@
         UINavigationController *segueNavigation = [segue destinationViewController];
         AddBeaconViewController *transferViewController = (AddBeaconViewController *)[[segueNavigation viewControllers] objectAtIndex:0];
         transferViewController.user_name = self.user_name;
+        
+        //Comment these two lines
         transferViewController.macAddress = [self.beaconTable cellForRowAtIndexPath:selectedRowIndex].textLabel.text;
         NSLog(@"%@, %@",transferViewController.macAddress, transferViewController.user_name);
+        
+        transferViewController.uuid = self.uuid;
+        transferViewController.major = self.major;
+        transferViewController.minor = self.minor;
+        
     }
 }
 

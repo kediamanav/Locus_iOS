@@ -7,6 +7,7 @@
 //
 
 #import "AddBeaconViewController.h"
+#import "BeaconDatabase.h"
 
 @interface AddBeaconViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *pictureBeacon;
@@ -22,6 +23,7 @@
 @property UITextView *activeView;
 
 @property UIActionSheet* attachmentMenuSheet;
+@property BeaconDatabase *beaconData;
 
 
 @end
@@ -49,6 +51,8 @@
     }
     self.nameBeacon.delegate=self;
     self.descriptionBeacon.delegate=self;
+    
+    self.beaconData = [[BeaconDatabase alloc]init];
 }
 
 - (NSManagedObjectContext *)managedObjectContext{
@@ -267,98 +271,54 @@
     }
 }
 
-/* Saves to global database
-- (void) saveToGlobalDatabase : (Items *)item{
+- (int) sendBeaconDataToServer : (NSString *) item_name{
+    NSManagedObjectContext *context = [self managedObjectContext];
     
-    //Creating the key-value pair arrays to hold the post data
-    NSArray *keys = [[NSArray alloc] initWithObjects:@"user_name",@"item_name",@"item_DOB",@"item_lastTracked",@"item_description",@"item_eLeashRange",@"item_isLost",@"item_eLeashOn",@"item_macAddress", nil];
-    NSArray *vals = [[NSArray alloc] initWithObjects:item.user_name,item.item_name, item.item_DOB, item.item_lastTracked, item.item_description, item.item_eLeashRange, item.item_isLost, item.item_eLeashOn , item.item_macAddress, nil];
-
-    // NSString *post =[[NSString alloc] initWithFormat:@"user_name=%@&item_name=%@&item_DOB=%@&item_lastTracked=%@&item_description=%@&item_eLeashRange=%ld&item_isLost=%ld&item_eLeashOn=%ld&item_macAddress=%@",_user_name,item_name, dateTimeStamp, dateTimeStamp, item_description, (long)range, (long)isLost, (long)eLeashOn, _macAddress];
-    //NSLog(@"PostData: %@",post);
-    //NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    //NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-
-    NSURL *url=[NSURL URLWithString:@"http://localhost/~kediamanav/login/addUserItem"];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:url];
-    [request setHTTPMethod:@"POST"];
-
-    NSMutableData *body = [NSMutableData data];
-
-    NSString *boundary = @"---------------------------14737809831466499882746641449";
-    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-    [request addValue:contentType forHTTPHeaderField:@"Content-Type"];
-
-    //Upload image only if the user has selected something, i.e the aplha of the image has changed
-    if(item.item_picture != nil){
-        //Imagedata file
-        NSLog(@"The item had an image");
-        NSData *imageData = item.item_picture;
-        
-        NSString *imageName= item.user_name;
-        imageName = [imageName stringByAppendingString:@"_"];
-        imageName = [imageName stringByAppendingString:item.item_name];
-        
-        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: attachment; name=\"imageFile\"; filename=\"%@.jpg\"\r\n", imageName] dataUsingEncoding:NSASCIIStringEncoding]];
-        [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[NSData dataWithData:imageData]];
-        [body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    // Create a new managed object
+    NSLog(@"AddNewBeacon");
+    NSLog(@"uuid: %@",self.uuid);
+    
+    NSEntityDescription *entityDesc = [NSEntityDescription entityForName:@"Beacon" inManagedObjectContext:context];
+    NSFetchRequest *request = [[NSFetchRequest alloc]init];
+    [request setEntity:entityDesc];
+    NSPredicate *predSearch = [NSPredicate predicateWithFormat:@"(uuid = %@) AND (major = %@) AND (minor = %@)"
+                               ,self.uuid,self.major,self.minor];
+    [request setPredicate:predSearch];
+    NSError *error;
+    Beacon *existingBeacon = [[context executeFetchRequest:request error:&error]lastObject];
+    if (existingBeacon) {
+        NSLog(@"Cant add beacon. it is already present");
     }
-    // Post data parameters
-    for(int i=0;i<[keys count];i++){
-        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSASCIIStringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", [keys objectAtIndex:i]] dataUsingEncoding:NSASCIIStringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"%@",[vals objectAtIndex:i]] dataUsingEncoding:NSASCIIStringEncoding]];
-        [body appendData:[@"\r\n" dataUsingEncoding:NSASCIIStringEncoding]];
+    else {
+        Beacon *beacon = [NSEntityDescription insertNewObjectForEntityForName:@"Beacon" inManagedObjectContext:context];
+        beacon.user_name = _user_name;
+        beacon.item_name = item_name;
+        beacon.uuid = [self.uuid UUIDString];
+        
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        beacon.major = [f numberFromString:self.major];
+        beacon.minor = [f numberFromString:self.minor];
+        
+        NSString  *temp = [NSString stringWithFormat:@"%@%@%@", @"Your ", item_name,@" is going out of range."];
+        beacon.message = temp;
+        beacon.action = [NSNumber numberWithInt:(int)3];
+        beacon.event = [NSNumber numberWithInt:(int)3];
+        beacon.modified = [NSNumber numberWithInt:(int)1];
+
+        
+        NSError *saveError;
+        if (![context save:&saveError]) {
+            NSLog(@"Error adding Beacon in Phone");
+        }
+        else {
+            NSLog(@"Beacon is added in Phone");
+            return 1;
+        }
     }
-
-    //[request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    //[request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    //[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:body];
-    NSLog(@"Body is set");
-
-    AFHTTPRequestOperation *datasource_upload_operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    NSLog(@"Just before executing afnetworking");
-    //NSError *error = [[NSError alloc] init];
-    //NSHTTPURLResponse *response = nil;
-    //NSData *urlData=[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    
-    [datasource_upload_operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        NSData *datasource_data = (NSData *)responseObject;
-        NSString *responseData = [[NSString alloc]initWithData:datasource_data encoding:NSUTF8StringEncoding];
-        NSLog(@"Response ==> %@", responseData);
-        
-        SBJsonParser *jsonParser = [SBJsonParser new];
-        NSDictionary *jsonData = (NSDictionary *) [jsonParser objectWithString:responseData error:nil];
-        NSLog(@"%@",jsonData);
-        NSInteger success = [(NSNumber *) [jsonData objectForKey:@"success"] integerValue];
-        NSLog(@"%ld",(long)success);
-        if(success == 1)
-        {
-            NSLog(@"Beacon successfully added to global database");
-        }
-        else{
-            NSString *error_msg = (NSString *) [jsonData objectForKey:@"error_message"];
-            NSLog(@"Beacon could not be added to global database: %@",error_msg);
-        }
-        
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error){
-        NSLog(@"Beacon could not be added to global database: %@",error);
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    }];
-    NSLog(@"Before addItem operation");
-    [self.pendingOperations.uploadQueue addOperation:datasource_upload_operation];
-    NSLog(@"After calling addItem operation");
+    return 0;
 }
-*/
+
 
 /* Sends the data of the newly added item to the server*/
 - (void) sendDataToServer : (NSString *)item_name :(NSString *) item_description :(NSInteger ) range :(NSInteger ) isLost :(NSInteger ) eLeashOn {
@@ -400,7 +360,13 @@
     NSLog(@"%@, %@, %@, %@, %ld, %ld, %ld", _user_name, _macAddress, item_name, item_description, (long)range, (long)eLeashOn, (long)isLost);
     
     //Sends the data to the server, replace with the local database
-    [self sendDataToServer: item_name : item_description : range : isLost : eLeashOn];
+    if ([self sendBeaconDataToServer: item_name]==1){
+        [self sendDataToServer: item_name : item_description : range : isLost : eLeashOn];
+    }
+    else{
+        [self alertStatus:@"Failed to add beacon":@"Adding beacon Failed!"];
+        [self performSegueWithIdentifier:@"unwindSegueToScanBeacon" sender:self];
+    }
 }
 
 

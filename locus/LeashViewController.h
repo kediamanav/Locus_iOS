@@ -10,6 +10,8 @@
 
 @interface LeashViewController : UIViewController
 
+@property (strong, nonatomic) NSString *user_name;
+@property (strong, nonatomic) NSString *item_name;
 @property (weak, nonatomic) IBOutlet UISwitch *switchOn;
 @property (weak, nonatomic) IBOutlet UILabel *eventType;
 @property (weak, nonatomic) IBOutlet UILabel *actionType;

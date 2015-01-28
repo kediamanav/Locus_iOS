@@ -15,8 +15,7 @@
 
 - (NSArray *) readAllBeacons;
 - (void) deleteBeacon:(Beacon *)beacon;
-- (void) addNewBeacon:(Beacon *)beacon;
-- (void) updateBeacon:(Beacon *)beacon;
-- (Beacon *) readBeacon: (NSString *)username item: (NSString *)itemname;
+- (int) updateBeacon:(Beacon *)beacon;
+- (Beacon *) readBeacon: (NSString *)username : (NSString *)itemname;
 
 @end
