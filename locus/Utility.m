@@ -91,7 +91,7 @@ NSString* const EventEnter = @"In Range";
 {
     static NSArray *eventImages;
     if (eventImages == nil) {
-        eventImages = @[[UIImage imageNamed:@"ImmidiateRange"],
+        eventImages = @[[UIImage imageNamed:@"ImmediateRange"],
                         [UIImage imageNamed:@"NearRange"],
                         [UIImage imageNamed:@"OutRange"],
                         [UIImage imageNamed:@"InRange"],

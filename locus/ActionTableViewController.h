@@ -1,5 +1,5 @@
 //
-//  ActionTableViewController.h
+//  Utility.h
 //  locus
 //
 //  Created by Manav Kedia on 26/01/15.
@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ActionTableViewController : UITableViewController
-
+@property (strong, nonatomic) NSString *chosenAction;
 @end

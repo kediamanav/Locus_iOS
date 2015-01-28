@@ -16,19 +16,11 @@
 
 @implementation EventTableViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.tableView setBackgroundView:[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"BackgroundiPhone5"]]];
+    [self.tableView setBackgroundView:[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"login_bg.jpg"]]];
+    self.tableView.backgroundView.alpha = 0.6;
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,6 +52,9 @@
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     
+    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundView = [UIView new];
+    cell.selectedBackgroundView = [UIView new];
     
     return cell;
 }

@@ -524,7 +524,7 @@
     }
     cell.thumbnailImage.image = cellImage;*/
      
-     
+    
     cell.thumbnailImage.layer.cornerRadius = cell.thumbnailImage.frame.size.width /2;
     cell.thumbnailImage.clipsToBounds = YES;
     

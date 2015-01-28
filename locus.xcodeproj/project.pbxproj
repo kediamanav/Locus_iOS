@@ -12,18 +12,22 @@
 		500803511A766C6D00F96E5D /* ActionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 500803501A766C6D00F96E5D /* ActionTableViewController.m */; };
 		500803541A766D5C00F96E5D /* EventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 500803531A766D5C00F96E5D /* EventTableViewCell.m */; };
 		500803571A766DAC00F96E5D /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 500803561A766DAC00F96E5D /* Utility.m */; };
-		5008035F1A766F2F00F96E5D /* ic_action_volume_muted.png in Resources */ = {isa = PBXBuildFile; fileRef = 500803581A766F2F00F96E5D /* ic_action_volume_muted.png */; };
-		500803601A766F2F00F96E5D /* ic_action_web_site.png in Resources */ = {isa = PBXBuildFile; fileRef = 500803591A766F2F00F96E5D /* ic_action_web_site.png */; };
-		500803611A766F2F00F96E5D /* ic_event_immediate.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008035A1A766F2F00F96E5D /* ic_event_immediate.png */; };
-		500803621A766F2F00F96E5D /* ic_event_in_range.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008035B1A766F2F00F96E5D /* ic_event_in_range.png */; };
-		500803631A766F2F00F96E5D /* ic_event_near.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008035C1A766F2F00F96E5D /* ic_event_near.png */; };
-		500803641A766F2F00F96E5D /* ic_event_not_in_range.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008035D1A766F2F00F96E5D /* ic_event_not_in_range.png */; };
-		500803651A766F2F00F96E5D /* monalisa.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008035E1A766F2F00F96E5D /* monalisa.png */; };
+		5008E9221A77E7DD00189481 /* BeaconData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E9211A77E7DD00189481 /* BeaconData.m */; };
+		5008E9251A77E9C400189481 /* ActionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E9241A77E9C400189481 /* ActionTableViewCell.m */; };
+		5008E9271A77FCCD00189481 /* Monalisa.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008E9261A77FCCD00189481 /* Monalisa.png */; };
+		5008E92A1A78097600189481 /* Beacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E9291A78097600189481 /* Beacon.m */; };
+		5008E92D1A7809AD00189481 /* BeaconDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E92C1A7809AD00189481 /* BeaconDatabase.m */; };
 		500DE8771A7576EA0095BD9C /* TrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 500DE8761A7576EA0095BD9C /* TrackViewController.m */; };
 		500DE87A1A758AA20095BD9C /* 2-23-030_HMA121.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE8781A758AA20095BD9C /* 2-23-030_HMA121.png */; };
 		500DE87B1A758AA20095BD9C /* camera-iphone-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE8791A758AA20095BD9C /* camera-iphone-icon.png */; };
 		500DE87D1A758C0F0095BD9C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 500DE87C1A758C0F0095BD9C /* MapKit.framework */; };
 		500DE87F1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE87E1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png */; };
+		5014E9B71A77AE0B003F4ACC /* Alarm.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B11A77AE0B003F4ACC /* Alarm.png */; };
+		5014E9B81A77AE0B003F4ACC /* ImmediateRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */; };
+		5014E9B91A77AE0B003F4ACC /* InRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B31A77AE0B003F4ACC /* InRange.png */; };
+		5014E9BA1A77AE0B003F4ACC /* NearRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B41A77AE0B003F4ACC /* NearRange.png */; };
+		5014E9BB1A77AE0B003F4ACC /* OutRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B51A77AE0B003F4ACC /* OutRange.png */; };
+		5014E9BC1A77AE0B003F4ACC /* Website.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B61A77AE0B003F4ACC /* Website.png */; };
 		5020190B1A712D9100C4442A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5020190A1A712D9100C4442A /* main.m */; };
 		5020190E1A712D9100C4442A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5020190D1A712D9100C4442A /* AppDelegate.m */; };
 		502019251A712D9100C4442A /* locusTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 502019241A712D9100C4442A /* locusTests.m */; };
@@ -115,19 +119,27 @@
 		500803531A766D5C00F96E5D /* EventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableViewCell.m; sourceTree = "<group>"; };
 		500803551A766DAC00F96E5D /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		500803561A766DAC00F96E5D /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
-		500803581A766F2F00F96E5D /* ic_action_volume_muted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_action_volume_muted.png; sourceTree = "<group>"; };
-		500803591A766F2F00F96E5D /* ic_action_web_site.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_action_web_site.png; sourceTree = "<group>"; };
-		5008035A1A766F2F00F96E5D /* ic_event_immediate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_event_immediate.png; sourceTree = "<group>"; };
-		5008035B1A766F2F00F96E5D /* ic_event_in_range.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_event_in_range.png; sourceTree = "<group>"; };
-		5008035C1A766F2F00F96E5D /* ic_event_near.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_event_near.png; sourceTree = "<group>"; };
-		5008035D1A766F2F00F96E5D /* ic_event_not_in_range.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_event_not_in_range.png; sourceTree = "<group>"; };
-		5008035E1A766F2F00F96E5D /* monalisa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = monalisa.png; sourceTree = "<group>"; };
+		5008E9201A77E7DD00189481 /* BeaconData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconData.h; sourceTree = "<group>"; };
+		5008E9211A77E7DD00189481 /* BeaconData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconData.m; sourceTree = "<group>"; };
+		5008E9231A77E9C400189481 /* ActionTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionTableViewCell.h; sourceTree = "<group>"; };
+		5008E9241A77E9C400189481 /* ActionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionTableViewCell.m; sourceTree = "<group>"; };
+		5008E9261A77FCCD00189481 /* Monalisa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Monalisa.png; path = locus/Resources/Images/Monalisa.png; sourceTree = "<group>"; };
+		5008E9281A78097600189481 /* Beacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Beacon.h; sourceTree = "<group>"; };
+		5008E9291A78097600189481 /* Beacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Beacon.m; sourceTree = "<group>"; };
+		5008E92B1A7809AD00189481 /* BeaconDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconDatabase.h; sourceTree = "<group>"; };
+		5008E92C1A7809AD00189481 /* BeaconDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconDatabase.m; sourceTree = "<group>"; };
 		500DE8751A7576EA0095BD9C /* TrackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackViewController.h; sourceTree = "<group>"; };
 		500DE8761A7576EA0095BD9C /* TrackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackViewController.m; sourceTree = "<group>"; };
 		500DE8781A758AA20095BD9C /* 2-23-030_HMA121.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "2-23-030_HMA121.png"; path = "../../../../../../Downloads/2-23-030_HMA121.png"; sourceTree = "<group>"; };
 		500DE8791A758AA20095BD9C /* camera-iphone-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "camera-iphone-icon.png"; path = "../../../../../../Downloads/camera-iphone-icon.png"; sourceTree = "<group>"; };
 		500DE87C1A758C0F0095BD9C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		500DE87E1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "yellow-exclamation-mark-in-triangle-hi.png"; path = "../../../../../../Downloads/yellow-exclamation-mark-in-triangle-hi.png"; sourceTree = "<group>"; };
+		5014E9B11A77AE0B003F4ACC /* Alarm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Alarm.png; sourceTree = "<group>"; };
+		5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImmediateRange.png; sourceTree = "<group>"; };
+		5014E9B31A77AE0B003F4ACC /* InRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InRange.png; sourceTree = "<group>"; };
+		5014E9B41A77AE0B003F4ACC /* NearRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NearRange.png; sourceTree = "<group>"; };
+		5014E9B51A77AE0B003F4ACC /* OutRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OutRange.png; sourceTree = "<group>"; };
+		5014E9B61A77AE0B003F4ACC /* Website.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Website.png; sourceTree = "<group>"; };
 		502019051A712D9100C4442A /* locus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = locus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		502019091A712D9100C4442A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5020190A1A712D9100C4442A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -266,6 +278,7 @@
 		502018FC1A712D9100C4442A = {
 			isa = PBXGroup;
 			children = (
+				5008E9261A77FCCD00189481 /* Monalisa.png */,
 				502019071A712D9100C4442A /* locus */,
 				502019341A712EB300C4442A /* Frameworks */,
 				502019211A712D9100C4442A /* locusTests */,
@@ -306,6 +319,8 @@
 				50201D221A7131CF00C4442A /* SignUpViewController.m */,
 				50201D1F1A7131CF00C4442A /* scanBeaconViewController.h */,
 				50201D201A7131CF00C4442A /* scanBeaconViewController.m */,
+				5008E9201A77E7DD00189481 /* BeaconData.h */,
+				5008E9211A77E7DD00189481 /* BeaconData.m */,
 				500DE8751A7576EA0095BD9C /* TrackViewController.h */,
 				500DE8761A7576EA0095BD9C /* TrackViewController.m */,
 				500803491A7665D900F96E5D /* LeashViewController.h */,
@@ -314,10 +329,12 @@
 				5008034D1A766C5E00F96E5D /* EventTableViewController.m */,
 				500803521A766D5C00F96E5D /* EventTableViewCell.h */,
 				500803531A766D5C00F96E5D /* EventTableViewCell.m */,
-				500803551A766DAC00F96E5D /* Utility.h */,
-				500803561A766DAC00F96E5D /* Utility.m */,
+				5008E9231A77E9C400189481 /* ActionTableViewCell.h */,
+				5008E9241A77E9C400189481 /* ActionTableViewCell.m */,
 				5008034F1A766C6D00F96E5D /* ActionTableViewController.h */,
 				500803501A766C6D00F96E5D /* ActionTableViewController.m */,
+				500803551A766DAC00F96E5D /* Utility.h */,
+				500803561A766DAC00F96E5D /* Utility.m */,
 				50201D8B1A71361800C4442A /* Images.xcassets */,
 				50201D921A713EF200C4442A /* Images */,
 				50201D081A7131CF00C4442A /* beaconClass.h */,
@@ -394,10 +411,14 @@
 			isa = PBXGroup;
 			children = (
 				50201D8F1A71399E00C4442A /* Model.xcdatamodeld */,
+				5008E9281A78097600189481 /* Beacon.h */,
+				5008E9291A78097600189481 /* Beacon.m */,
 				50201D261A7131CF00C4442A /* Users.h */,
 				50201D271A7131CF00C4442A /* Users.m */,
 				50201D131A7131CF00C4442A /* Items.h */,
 				50201D141A7131CF00C4442A /* Items.m */,
+				5008E92B1A7809AD00189481 /* BeaconDatabase.h */,
+				5008E92C1A7809AD00189481 /* BeaconDatabase.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -465,13 +486,12 @@
 		50201D921A713EF200C4442A /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				500803581A766F2F00F96E5D /* ic_action_volume_muted.png */,
-				500803591A766F2F00F96E5D /* ic_action_web_site.png */,
-				5008035A1A766F2F00F96E5D /* ic_event_immediate.png */,
-				5008035B1A766F2F00F96E5D /* ic_event_in_range.png */,
-				5008035C1A766F2F00F96E5D /* ic_event_near.png */,
-				5008035D1A766F2F00F96E5D /* ic_event_not_in_range.png */,
-				5008035E1A766F2F00F96E5D /* monalisa.png */,
+				5014E9B11A77AE0B003F4ACC /* Alarm.png */,
+				5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */,
+				5014E9B31A77AE0B003F4ACC /* InRange.png */,
+				5014E9B41A77AE0B003F4ACC /* NearRange.png */,
+				5014E9B51A77AE0B003F4ACC /* OutRange.png */,
+				5014E9B61A77AE0B003F4ACC /* Website.png */,
 				500DE87E1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png */,
 				500DE8781A758AA20095BD9C /* 2-23-030_HMA121.png */,
 				500DE8791A758AA20095BD9C /* camera-iphone-icon.png */,
@@ -583,32 +603,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				50201DAD1A713EF200C4442A /* Default@2x-1.png in Resources */,
+				5014E9BA1A77AE0B003F4ACC /* NearRange.png in Resources */,
 				50201DBE1A713EF200C4442A /* Track_2.png in Resources */,
+				5014E9B91A77AE0B003F4ACC /* InRange.png in Resources */,
 				50201DB11A713EF200C4442A /* Default@2x-6.png in Resources */,
+				5014E9B81A77AE0B003F4ACC /* ImmediateRange.png in Resources */,
 				50201D8E1A71390200C4442A /* Main.storyboard in Resources */,
 				50201DB71A713EF200C4442A /* Login_1.png in Resources */,
 				50201DBC1A713EF200C4442A /* tableview_cell.png in Resources */,
 				500DE87B1A758AA20095BD9C /* camera-iphone-icon.png in Resources */,
 				50201DB01A713EF200C4442A /* Default@2x-5.png in Resources */,
-				5008035F1A766F2F00F96E5D /* ic_action_volume_muted.png in Resources */,
-				500803601A766F2F00F96E5D /* ic_action_web_site.png in Resources */,
 				50201DBA1A713EF200C4442A /* Register_1.png in Resources */,
+				5014E9BC1A77AE0B003F4ACC /* Website.png in Resources */,
 				50201DB81A713EF200C4442A /* Login_2.png in Resources */,
 				500DE87A1A758AA20095BD9C /* 2-23-030_HMA121.png in Resources */,
-				500803631A766F2F00F96E5D /* ic_event_near.png in Resources */,
 				50201DA91A713EF200C4442A /* Add item_1.png in Resources */,
 				500DE87F1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png in Resources */,
 				50201DB41A713EF200C4442A /* Extra1.png in Resources */,
-				500803611A766F2F00F96E5D /* ic_event_immediate.png in Resources */,
 				50201DAA1A713EF200C4442A /* Add item_2.png in Resources */,
-				500803641A766F2F00F96E5D /* ic_event_not_in_range.png in Resources */,
+				5014E9BB1A77AE0B003F4ACC /* OutRange.png in Resources */,
 				50201DBD1A713EF200C4442A /* Track_1.png in Resources */,
+				5008E9271A77FCCD00189481 /* Monalisa.png in Resources */,
 				50201D8C1A71361800C4442A /* Images.xcassets in Resources */,
-				500803651A766F2F00F96E5D /* monalisa.png in Resources */,
 				50201DB61A713EF200C4442A /* item_default.png in Resources */,
 				50201DB51A713EF200C4442A /* item1.jpg in Resources */,
 				50201DAC1A713EF200C4442A /* Default.png in Resources */,
-				500803621A766F2F00F96E5D /* ic_event_in_range.png in Resources */,
+				5014E9B71A77AE0B003F4ACC /* Alarm.png in Resources */,
 				50201D281A7131CF00C4442A /* BeaconCell.xib in Resources */,
 				50201DAE1A713EF200C4442A /* Default@2x-2.png in Resources */,
 				50201DAF1A713EF200C4442A /* Default@2x-5-1.png in Resources */,
@@ -642,6 +662,7 @@
 				50201D871A71357200C4442A /* AFURLConnectionOperation.m in Sources */,
 				50201D2F1A7131CF00C4442A /* Items.m in Sources */,
 				50201D3B1A7131D900C4442A /* AddBeaconViewController.m in Sources */,
+				5008E92D1A7809AD00189481 /* BeaconDatabase.m in Sources */,
 				50201D661A71349700C4442A /* SBJsonStreamParserAdapter.m in Sources */,
 				50201D2D1A7131CF00C4442A /* ImageDownloader.m in Sources */,
 				5020190E1A712D9100C4442A /* AppDelegate.m in Sources */,
@@ -651,6 +672,7 @@
 				50201D881A71357200C4442A /* AFURLRequestSerialization.m in Sources */,
 				50201D691A71349700C4442A /* SBJsonStreamWriterAccumulator.m in Sources */,
 				500803541A766D5C00F96E5D /* EventTableViewCell.m in Sources */,
+				5008E9251A77E9C400189481 /* ActionTableViewCell.m in Sources */,
 				50201D6C1A71349700C4442A /* SBJsonUTF8Stream.m in Sources */,
 				50201D681A71349700C4442A /* SBJsonStreamWriter.m in Sources */,
 				50201D2C1A7131CF00C4442A /* CoreDataHelper.m in Sources */,
@@ -660,6 +682,7 @@
 				50201D361A7131CF00C4442A /* SignUpViewController.m in Sources */,
 				50201D621A71349700C4442A /* NSObject+SBJson.m in Sources */,
 				500DE8771A7576EA0095BD9C /* TrackViewController.m in Sources */,
+				5008E92A1A78097600189481 /* Beacon.m in Sources */,
 				50201D2B1A7131CF00C4442A /* BeaconTableViewCell.m in Sources */,
 				5020190B1A712D9100C4442A /* main.m in Sources */,
 				50201D301A7131CF00C4442A /* ItemUploader.m in Sources */,
@@ -677,6 +700,7 @@
 				50201D641A71349700C4442A /* SBJsonStreamParser.m in Sources */,
 				50201D821A71357200C4442A /* AFHTTPRequestOperation.m in Sources */,
 				50201D671A71349700C4442A /* SBJsonStreamParserState.m in Sources */,
+				5008E9221A77E7DD00189481 /* BeaconData.m in Sources */,
 				50201D461A7133E400C4442A /* mainTableViewController.m in Sources */,
 				50201D351A7131CF00C4442A /* scanBeaconViewController.m in Sources */,
 			);

@@ -7,19 +7,11 @@
 //
 
 #import "LeashViewController.h"
+#import "Utility.h"
+#import "EventTableViewController.h"
+#import "ActionTableViewController.h"
 
 @interface LeashViewController ()
-@property (weak, nonatomic) IBOutlet UISwitch *switchOn;
-@property (weak, nonatomic) IBOutlet UILabel *eventType;
-@property (weak, nonatomic) IBOutlet UILabel *actionType;
-@property (weak, nonatomic) IBOutlet UITextView *messageView;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
-@property (weak, nonatomic) IBOutlet UILabel *label1;
-@property (weak, nonatomic) IBOutlet UILabel *label2;
-@property (weak, nonatomic) IBOutlet UILabel *label3;
-@property (weak, nonatomic) IBOutlet UILabel *label4;
-- (IBAction)savePressed:(id)sender;
-- (IBAction)switchPressed:(id)sender;
 
 @end
 
@@ -70,6 +62,8 @@
         [self.eventType setHidden:NO];
         [self.messageView setHidden:NO];
         [self.saveButton setHidden:NO];
+        self.eventType.text = [[Utility getBeaconsEvents] firstObject];
+        self.actionType.text = [[Utility getBeaconsActions] firstObject];
     }
     if(![_switchOn isOn]){
         [self.label1 setHidden:YES];
@@ -82,4 +76,55 @@
         [self.saveButton setHidden:YES];
     }
 }
+
+- (IBAction)eventPressed:(id)sender {
+    [self performSegueWithIdentifier:@"ShowEventSegue" sender:self];
+}
+
+- (IBAction)actionPressed:(id)sender {
+    [self performSegueWithIdentifier:@"ShowActionSegue" sender:self];
+}
+
+
+/*-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSLog(@"prepareForSague in ConfigViewController");
+    isSeguePerformed = YES;
+    if ([segue.identifier isEqualToString:@"EventSegue"]) {
+        EventTableViewController *eventVC = [segue destinationViewController];
+        if (self.isAddView) {
+            eventVC.chosenEvent = self.existingBeacon.event;
+        }
+        else {
+            eventVC.chosenEvent = self.selectedBeacon.event;
+        }
+        
+        
+    } else if ([segue.identifier isEqualToString:@"ActionSegue"]) {
+        ActionTableViewController *actionVC = [segue destinationViewController];
+        if (self.isAddView) {
+            actionVC.chosenAction = self.existingBeacon.action;
+        }
+        else {
+            actionVC.chosenAction = self.selectedBeacon.action;
+        }
+        
+    }
+    
+}*/
+
+
+- (IBAction)unwindEventSelector:(UIStoryboardSegue*)sender
+{
+    EventTableViewController *eventVC = [sender sourceViewController];
+    self.eventType.text = eventVC.chosenEvent;
+   
+}
+
+- (IBAction)unwindActionSelector:(UIStoryboardSegue*)sender
+{
+    ActionTableViewController *actionVC = [sender sourceViewController];
+    self.actionType.text = actionVC.chosenAction;
+}
+
 @end
