@@ -71,6 +71,26 @@
     }
 }
 
+-(void) checkForModifiedBeacons{
+    
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Beacon"];
+    
+    // For conditional fetching
+    NSPredicate *filter = [NSPredicate predicateWithFormat:@"modified == %d",[[NSNumber numberWithInt:1] intValue]];
+    [fetchRequest setPredicate:filter];
+    
+    NSArray *fetchedObjects = [_coreDataHelper.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    NSLog(@"Checking for modified beacon");
+    for(Beacon *beacon in fetchedObjects){
+        //This function is supposed to handle both add and update
+        //Write php part to handle updates, i.e. modify the entire row if the item exists before with the value being changed
+        NSLog(@"Found modified");
+        NSLog(@"%@ %@ %@ %ld %ld %ld %ld %@", beacon.user_name,beacon.item_name,beacon.uuid, (long)[beacon.major integerValue],(long)[beacon.minor integerValue],(long)[beacon.event integerValue],(long)[beacon.action integerValue], beacon.message);
+        [self startBeaconUploading:beacon];
+    }
+}
+
+
 #pragma mark -Lazy initialization
 
 - (PendingUploads *)pendingOperations {
@@ -114,6 +134,40 @@
         }
     }
 }
+
+- (void)startBeaconUploading:(Beacon *)beacon {
+    BeaconUploader *beaconUploader = [[BeaconUploader alloc] initWithItems:beacon delegate:self];
+    [self.pendingOperations.uploadQueue addOperation:beaconUploader];
+}
+
+- (void)beaconUploadDidFinish:(BeaconUploader *)uploader {
+    
+    NSString *item_name = uploader.item_name;
+    NSString *user_name = uploader.user_name;
+    BOOL success = uploader.success;
+    
+    //Update here that the item is no longer modified
+    if(success==true){
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Beacon"];
+        
+        // For conditional fetching
+        NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",user_name,item_name];
+        [request setPredicate:filter];
+        
+        NSError *error = nil;
+        Beacon *beacon = nil;
+        beacon = [[_coreDataHelper.managedObjectContext executeFetchRequest:request error:&error] lastObject];
+        
+        if(error){
+            NSLog(@"Can't execute fetch request! %@ %@", error, [error localizedDescription]);
+        }
+        if(beacon){
+            beacon.modified = [NSNumber numberWithInt:(int)0];
+            [_coreDataHelper saveContext];
+        }
+    }
+}
+
 
 
 #pragma mark - Other functions
@@ -181,7 +235,7 @@
     }
     [self cdh];
     //Call this to erase all the item and user data
-    //[self demo];
+    [self demo];
     
     
     Users *user=[self checkIfUserLoggedIn];
@@ -209,6 +263,7 @@
     [self.window makeKeyAndVisible];
     
     [self checkForModifiedItems];
+    [self checkForModifiedBeacons];
     return YES;
 }
 

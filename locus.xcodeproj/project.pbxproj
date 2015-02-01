@@ -97,6 +97,7 @@
 		50201DBC1A713EF200C4442A /* tableview_cell.png in Resources */ = {isa = PBXBuildFile; fileRef = 50201DA61A713EF200C4442A /* tableview_cell.png */; };
 		50201DBD1A713EF200C4442A /* Track_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 50201DA71A713EF200C4442A /* Track_1.png */; };
 		50201DBE1A713EF200C4442A /* Track_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 50201DA81A713EF200C4442A /* Track_2.png */; };
+		50A8A91E1A7E67440078BB8C /* BeaconUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A8A91D1A7E67440078BB8C /* BeaconUploader.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -253,6 +254,8 @@
 		50201DA61A713EF200C4442A /* tableview_cell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tableview_cell.png; sourceTree = "<group>"; };
 		50201DA71A713EF200C4442A /* Track_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Track_1.png; sourceTree = "<group>"; };
 		50201DA81A713EF200C4442A /* Track_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Track_2.png; sourceTree = "<group>"; };
+		50A8A91C1A7E67440078BB8C /* BeaconUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BeaconUploader.h; path = ../BeaconUploader.h; sourceTree = "<group>"; };
+		50A8A91D1A7E67440078BB8C /* BeaconUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BeaconUploader.m; path = ../BeaconUploader.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -388,6 +391,8 @@
 		50201D3C1A7131F800C4442A /* Upload Items */ = {
 			isa = PBXGroup;
 			children = (
+				50A8A91C1A7E67440078BB8C /* BeaconUploader.h */,
+				50A8A91D1A7E67440078BB8C /* BeaconUploader.m */,
 				50201D151A7131CF00C4442A /* ItemUploader.h */,
 				50201D161A7131CF00C4442A /* ItemUploader.m */,
 				50201D1B1A7131CF00C4442A /* PendingUploads.h */,
@@ -695,6 +700,7 @@
 				50201D321A7131CF00C4442A /* PendingOperations.m in Sources */,
 				50201D831A71357200C4442A /* AFHTTPRequestOperationManager.m in Sources */,
 				50201D291A7131CF00C4442A /* beaconClass.m in Sources */,
+				50A8A91E1A7E67440078BB8C /* BeaconUploader.m in Sources */,
 				50201D891A71357200C4442A /* AFURLResponseSerialization.m in Sources */,
 				50201D381A7131CF00C4442A /* Users.m in Sources */,
 				50201D6B1A71349700C4442A /* SBJsonTokeniser.m in Sources */,

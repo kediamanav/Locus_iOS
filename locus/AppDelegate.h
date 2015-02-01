@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "CoreDataHelper.h"
 #include "ItemUploader.h"
+#include "BeaconUploader.h"
 #include "PendingUploads.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,ItemUploaderDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,ItemUploaderDelegate, BeaconUploaderDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong, readonly) CoreDataHelper *coreDataHelper;

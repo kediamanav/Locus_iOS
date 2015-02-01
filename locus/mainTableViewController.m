@@ -66,13 +66,14 @@
     locationManager.delegate = self;
     isAppInBackground = NO;
     [self initSound];
+    
     self.regions = [[NSMutableArray alloc]initWithCapacity:[[Utility getBeaconsUUIDS] count]];
     for (int index = 0; index < [[Utility getBeaconsUUIDS] count]; index++)
     {
         [self.regions addObject:[NSNull null]];
     }
     
-    self.beacons = [self.database readAllBeacons];
+    /*self.beacons = [self.database readAllBeacons];
     NSLog(@"Number of beacons found : %lu",(unsigned long)[self.beacons count]);
     isActionPerformed = NO;
     self.beaconsRange = [[NSMutableArray alloc] initWithCapacity:[self.beacons count]];
@@ -80,6 +81,8 @@
     {
         [self.beaconsRange addObject:[NSNull null]];
     }
+    [self regionCreators];*/
+
     
     //Call the function to load the array data for the table
     [self loadTableData];
@@ -91,12 +94,9 @@
 }
 
 
--(void) viewWillAppear:(BOOL)animated
-{
+-(void) regionCreators{
     [super viewWillAppear:YES];
-    NSLog(@"viewWillAppear Beacons");
-    
-    
+    NSLog(@"regionCreator Beacons");
     
     /*
      * Create Regions for each unique Beacon UUID provided in the app and these should be fixed and known
@@ -109,9 +109,6 @@
     {
         BOOL isBeaconFound = NO;
         BOOL isLeashEnable = NO;
-        
-        
-        
         
         for(int beaconIndex = 0; beaconIndex < [self.beacons count]; beaconIndex++)
         {
@@ -203,7 +200,7 @@
 /*
  **Executed when the user comes back from after the search of beacons
  * so we should again search and see if any new data was added or not
-*/
+ */
 - (IBAction)unwindToList:(UIStoryboardSegue *)seque{
     if(_loadFromLocal==0){
         self.totalItems = 0;
@@ -228,7 +225,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    NSLog(@"itemsloaded: %ld, total: %ld", (long)self.itemsLoaded,(long)self.totalItems);
     if(_loadFromLocal ==0 && self.itemsLoaded == self.totalItems){
+        NSLog(@"load from local set");
         _loadFromLocal = 1;
     }
     if([[segue identifier] isEqualToString:@"scanBeaconSegue"]){
@@ -258,7 +257,7 @@
  ** This method is to load the table from local database
  */
 - (void) loadFromLocalDatabase{
-
+    
     /*
      **  Method to fetch all the objects from the database
      */
@@ -300,117 +299,226 @@
         NSLog(@"Name: %@, Last-tracked: %@",item1.name, item1.lastTracked);
     }
     self.photos = records;
+    self.beacons = [self.database readAllBeacons];
+    NSLog(@"Number of beacons found : %lu",(unsigned long)[self.beacons count]);
+    isActionPerformed = NO;
+    self.beaconsRange = [[NSMutableArray alloc] initWithCapacity:[self.beacons count]];
+    for (int index = 0; index < [self.beacons  count]; index++)
+    {
+        [self.beaconsRange addObject:[NSNull null]];
+    }
+    [self regionCreators];
+    
     NSLog(@"Before table reload");
     [self.tableView reloadData];
     NSLog(@"After table reload");
+    
+}
 
+- (void) loadGlobalItemDatabase{
+    NSString *post =[[NSString alloc] initWithFormat:@"user_name=%@",user_name];
+    NSLog(@"PostData: %@",post);
+    
+    NSURL *url=[NSURL URLWithString:@"http://locus-trak.rhcloud.com/login/getUserItems"];
+    
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    
+    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    
+    AFHTTPRequestOperation *datasource_download_operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    [datasource_download_operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSData *datasource_data = (NSData *)responseObject;
+        
+        NSString *responseData = [[NSString alloc]initWithData:datasource_data encoding:NSUTF8StringEncoding];
+        NSLog(@"Response ==> %@", responseData);
+        
+        SBJsonParser *jsonParser = [SBJsonParser new];
+        NSArray  *itemList = [jsonParser objectWithString:responseData error:NULL];
+        
+        NSMutableArray *records = [NSMutableArray array];
+        if(![responseData isEqualToString:@"{\"success\":0,\"error_message\":\"\"}"]){
+            
+            for (NSDictionary *item in itemList){
+                
+                // Now add it to the CoreData database also
+                // Add to persistent store here
+                NSManagedObjectContext *context = [self managedObjectContext];
+                Items *newItem = [NSEntityDescription insertNewObjectForEntityForName:@"Items" inManagedObjectContext:context];
+                
+                beaconClass *item1=[[beaconClass alloc] init];
+                item1.name = [item objectForKey:@"item_name"];
+                item1.lastTracked = [item objectForKey:@"item_lastTracked"];
+                
+                NSString *pictureURL = [item objectForKey:@"item_picture"];
+                PhotoRecord *record = [[PhotoRecord alloc] init];
+                if(![pictureURL isEqual: [NSNull null]]){
+                    record.URL = [NSURL URLWithString:pictureURL];
+                    NSLog(@"pictureURL: %@",pictureURL);
+                    record.itemImage = true;
+                }
+                else{
+                    record.itemImage = false;
+                    newItem.item_picture = [[NSData alloc] init];
+                }
+                
+                [records addObject:record];
+                record = nil;
+                NSLog(@"Size of photos array: %lu", (unsigned long)records.count);
+                item1.imageURL = pictureURL;
+                
+                [self.items addObject:item1];
+                NSLog(@"Name: %@, Last-tracked: %@",item1.name, item1.lastTracked);
+                
+                newItem.user_name = user_name;
+                newItem.item_name = [item objectForKey:@"item_name"];
+                newItem.item_description = [item objectForKey:@"item_description"];
+                newItem.item_macAddress = [item objectForKey:@"item_macAddress"];
+                //newItem.item_id = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_id"] integerValue]];
+                newItem.item_isLost = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_isLost"] integerValue]];
+                newItem.item_eLeashRange = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_eLeashRange"] integerValue]];
+                newItem.item_eLeashOn = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_eLeashOn"] integerValue]];
+                newItem.item_DOB = [item objectForKey:@"item_DOB"];
+                newItem.item_lastTracked = [item objectForKey:@"item_lastTracked"];
+                
+                //Now save the context
+                NSError *error = nil;
+                // Save the object to persistent store
+                if (![context save:&error]) {
+                    NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                }
+            }
+        }
+        self.totalItems = self.items.count;
+        self.photos = records;
+        NSLog(@"Before table reload");
+        [self.tableView reloadData];
+        NSLog(@"After table reload");
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        alert = nil;
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    }];
+    NSLog(@"Before add operation");
+    [self.pendingOperations.downloadQueue addOperation:datasource_download_operation];
+    NSLog(@"After calling add operation");
+}
+
+- (void) loadGlobalBeaconDatabase{
+    NSString *post =[[NSString alloc] initWithFormat:@"user_name=%@",user_name];
+    NSLog(@"PostData: %@",post);
+    
+    NSURL *url=[NSURL URLWithString:@"http://locus-trak.rhcloud.com/login/getUserBeacons"];
+    
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    
+    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSError *error = [[NSError alloc] init];
+    NSHTTPURLResponse *response = nil;
+    NSData *urlData=[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    
+    NSLog(@"Response code: %ld", (long)[response statusCode]);
+    if ([response statusCode] >=200 && [response statusCode] <300)
+    {
+        NSString *responseData = [[NSString alloc]initWithData:urlData encoding:NSUTF8StringEncoding];
+        NSLog(@"Response ==> %@", responseData);
+    
+    
+    
+    /*AFHTTPRequestOperation *datasource_download_operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    NSLog(@"Before sending HTTP request");
+    [datasource_download_operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Just inside");
+        NSData *datasource_data = (NSData *)responseObject;
+        
+        NSString *responseData = [[NSString alloc]initWithData:datasource_data encoding:NSUTF8StringEncoding];
+        NSLog(@"Response ==> %@", responseData);
+        */
+        SBJsonParser *jsonParser = [SBJsonParser new];
+        NSArray  *beaconList = [jsonParser objectWithString:responseData error:NULL];
+        
+        if(![responseData isEqualToString:@"{\"success\":0,\"error_message\":\"\"}"]){
+            
+            for (NSDictionary *beacon in beaconList){
+                
+                // Now add it to the CoreData database also
+                // Add to persistent store here
+                NSManagedObjectContext *context = [self managedObjectContext];
+                Beacon *newBeacon = [NSEntityDescription insertNewObjectForEntityForName:@"Beacon" inManagedObjectContext:context];
+                
+                newBeacon.user_name = user_name;
+                newBeacon.item_name = [beacon objectForKey:@"item_name"];
+                newBeacon.uuid = [beacon objectForKey:@"uuid"];
+                newBeacon.major = [NSNumber numberWithInt:(int)[[beacon objectForKey:@"major"] integerValue]];
+                newBeacon.minor = [NSNumber numberWithInt:(int)[[beacon objectForKey:@"minor"] integerValue]];
+                newBeacon.event = [NSNumber numberWithInt:(int)[[beacon objectForKey:@"event"] integerValue]];
+                newBeacon.action = [NSNumber numberWithInt:(int)[[beacon objectForKey:@"action"] integerValue]];
+                newBeacon.message = [beacon objectForKey:@"message"];
+                newBeacon.modified = [NSNumber numberWithInt:0];
+                
+                //Now save the context
+                NSError *error = nil;
+                // Save the object to persistent store
+                if (![context save:&error]) {
+                    NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                }
+            }
+        }
+        NSLog(@"Beacon added to beacon database");
+        self.beacons = [self.database readAllBeacons];
+        NSLog(@"Number of beacons found : %lu",(unsigned long)[self.beacons count]);
+        isActionPerformed = NO;
+        self.beaconsRange = [[NSMutableArray alloc] initWithCapacity:[self.beacons count]];
+        for (int index = 0; index < [self.beacons  count]; index++)
+        {
+            [self.beaconsRange addObject:[NSNull null]];
+        }
+        [self regionCreators];
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    } /*failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        alert = nil;
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    }];*/
 }
 
 /*
  ** Load from the global database and also add to the local database
  */
 - (void) loadFromGlobalDatabase{
-        if([user_name isEqualToString:@""]) {
-            [self alertStatus:@"Not logged in" :@"Error!"];
-        } else {
-            NSString *post =[[NSString alloc] initWithFormat:@"user_name=%@",user_name];
-            NSLog(@"PostData: %@",post);
-            
-            NSURL *url=[NSURL URLWithString:@"http://locus-trak.rhcloud.com/login/getUserItems"];
-            
-            NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-            
-            NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-            
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-            [request setURL:url];
-            [request setHTTPMethod:@"POST"];
-            [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-            [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-            [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-            [request setHTTPBody:postData];
-            
-            
-            AFHTTPRequestOperation *datasource_download_operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            
-            [datasource_download_operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-                
-                NSData *datasource_data = (NSData *)responseObject;
-                
-                NSString *responseData = [[NSString alloc]initWithData:datasource_data encoding:NSUTF8StringEncoding];
-                NSLog(@"Response ==> %@", responseData);
-                
-                SBJsonParser *jsonParser = [SBJsonParser new];
-                NSArray  *itemList = [jsonParser objectWithString:responseData error:NULL];
-                
-                NSMutableArray *records = [NSMutableArray array];
-                for (NSDictionary *item in itemList){
-                    
-                    // Now add it to the CoreData database also
-                    // Add to persistent store here
-                    NSManagedObjectContext *context = [self managedObjectContext];
-                    Items *newItem = [NSEntityDescription insertNewObjectForEntityForName:@"Items" inManagedObjectContext:context];
-                    
-                    beaconClass *item1=[[beaconClass alloc] init];
-                    item1.name = [item objectForKey:@"item_name"];
-                    item1.lastTracked = [item objectForKey:@"item_lastTracked"];
-                    
-                    NSString *pictureURL = [item objectForKey:@"item_picture"];
-                    PhotoRecord *record = [[PhotoRecord alloc] init];
-                    if(![pictureURL isEqual: [NSNull null]]){
-                        record.URL = [NSURL URLWithString:pictureURL];
-                        NSLog(@"pictureURL: %@",pictureURL);
-                        record.itemImage = true;
-                    }
-                    else{
-                        record.itemImage = false;
-                        newItem.item_picture = [[NSData alloc] init];
-                    }
-                    
-                    [records addObject:record];
-                    record = nil;
-                    NSLog(@"Size of photos array: %lu", (unsigned long)records.count);
-                    item1.imageURL = pictureURL;
-                    
-                    [self.items addObject:item1];
-                    NSLog(@"Name: %@, Last-tracked: %@",item1.name, item1.lastTracked);
-                    
-                    newItem.user_name = user_name;
-                    newItem.item_name = [item objectForKey:@"item_name"];
-                    newItem.item_description = [item objectForKey:@"item_description"];
-                    newItem.item_macAddress = [item objectForKey:@"item_macAddress"];
-                    //newItem.item_id = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_id"] integerValue]];
-                    newItem.item_isLost = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_isLost"] integerValue]];
-                    newItem.item_eLeashRange = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_eLeashRange"] integerValue]];
-                    newItem.item_eLeashOn = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_eLeashOn"] integerValue]];
-                    newItem.item_DOB = [item objectForKey:@"item_DOB"];
-                    newItem.item_lastTracked = [item objectForKey:@"item_lastTracked"];
-                    
-                    //Now save the context
-                    NSError *error = nil;
-                    // Save the object to persistent store
-                    if (![context save:&error]) {
-                        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
-                    }
-                }
-                self.totalItems = self.items.count;
-                self.photos = records;
-                NSLog(@"Before table reload");
-                [self.tableView reloadData];
-                NSLog(@"After table reload");
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error){
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [alert show];
-                alert = nil;
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-            }];
-            NSLog(@"Before add operation");
-            [self.pendingOperations.downloadQueue addOperation:datasource_download_operation];
-            NSLog(@"After calling add operation");
-        }
+    if([user_name isEqualToString:@""]) {
+        [self alertStatus:@"Not logged in" :@"Error!"];
+    } else {
+        [self loadGlobalBeaconDatabase];
+        [self loadGlobalItemDatabase];
+    }
 }
 
 /*
@@ -422,29 +530,37 @@
     //First clear the array and then load data into the array
     [self.items removeAllObjects];
     [self.photos removeAllObjects];
-     
+    
     //Choose between the 2 based on whether the database exists or not
     if(_loadFromLocal==1){
+        NSLog(@"LOCAL");
         [self loadFromLocalDatabase];
     }
     else{
         //Clear the local database
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Items"];
+        NSLog(@"GLOBAL ITEMS AND BEACONS");
+        NSFetchRequest *request1 = [NSFetchRequest fetchRequestWithEntityName:@"Items"];
+        NSFetchRequest *request2 = [NSFetchRequest fetchRequestWithEntityName:@"Beacon"];
         
         //For conditional fetching
         NSPredicate *filter = [NSPredicate predicateWithFormat:@"user_name=%@",user_name];
-        [request setPredicate:filter];
+        [request1 setPredicate:filter];
+        [request2 setPredicate:filter];
         
         //Add to persistent store here
         NSManagedObjectContext *context = [self managedObjectContext];
         
-        NSArray *fetchedObjects = [context executeFetchRequest:request error:nil];
+        NSArray *fetchedObjects1 = [context executeFetchRequest:request1 error:nil];
+        NSArray *fetchedObjects2 = [context executeFetchRequest:request2 error:nil];
         
-        for(Items *item in fetchedObjects){
+        for(Items *item in fetchedObjects1){
             //For deleting an object
             [context deleteObject:item];
         }
-        
+        for(Beacon *beacon in fetchedObjects2){
+            //For deleting an object
+            [context deleteObject:beacon];
+        }
         [self loadFromGlobalDatabase];
     }
 }
@@ -472,17 +588,17 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ListPrototypeCell" forIndexPath:indexPath];
     BeaconTableViewCell *cell = (BeaconTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"ListPrototypeCell" forIndexPath:indexPath];
-
+    
     /*if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ListPrototypeCell" owner:self options:nil];
-        cell = [nib objectAtIndex:0];
-    }*/
+     {
+     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ListPrototypeCell" owner:self options:nil];
+     cell = [nib objectAtIndex:0];
+     }*/
     // Configure the cell...
     beaconClass *curItem = [self.items objectAtIndex:indexPath.row];
     cell.nameLabel.text = curItem.name;
     //cell.lastTrackedLabel.text = [self getBeaconRange:[self.beaconsRange objectAtIndex:indexPath.row]];
-    //cell.lastTrackedLabel.text=curItem.lastTracked;
+    cell.lastTrackedLabel.text=curItem.lastTracked;
     
     PhotoRecord *aRecord = [self.photos objectAtIndex:indexPath.row];
     NSLog(@"LoadFromLocal from phptorecord: %d",aRecord.loadFromLocal);
@@ -504,7 +620,7 @@
         cell.thumbnailImage.image = aRecord.image;
         
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Items"];
-    
+        
         // For conditional fetching
         NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",user_name,curItem.name];
         [request setPredicate:filter];
@@ -538,16 +654,16 @@
     }
     
     /*UIImage *cellImage;
-    if([curItem.imageURL isEqual: [NSNull null]]){
-        cellImage = [UIImage imageNamed:@"item_default.png"];
-    }
-    else{
-        NSURL *imageURL = [NSURL URLWithString:curItem.imageURL];
-        NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
-        cellImage = [UIImage imageWithData:imageData];
-    }
-    cell.thumbnailImage.image = cellImage;*/
-     
+     if([curItem.imageURL isEqual: [NSNull null]]){
+     cellImage = [UIImage imageNamed:@"item_default.png"];
+     }
+     else{
+     NSURL *imageURL = [NSURL URLWithString:curItem.imageURL];
+     NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
+     cellImage = [UIImage imageWithData:imageData];
+     }
+     cell.thumbnailImage.image = cellImage;*/
+    
     
     cell.thumbnailImage.layer.cornerRadius = cell.thumbnailImage.frame.size.width /2;
     cell.thumbnailImage.clipsToBounds = YES;
@@ -568,7 +684,7 @@
 }
 
 - (void)startOperationsForPhotoRecord:(PhotoRecord *)record atIndexPath:(NSIndexPath *)indexPath {
-
+    
     if (!record.hasImage) {
         [self startImageDownloadingForRecord:record atIndexPath:indexPath];
     }
@@ -632,13 +748,13 @@
 
 - (void)showMonalisa
 {
-    [self performSegueWithIdentifier:@"MonalisaSegue" sender:self];
+    //[self performSegueWithIdentifier:@"MonalisaSegue" sender:self];
 }
 
 - (void)openWebsite
 {
     //if ([self isInternetConnectionAvailable]) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://www.nordicsemi.com"]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://www.nordicsemi.com"]];
     //}
     //else {
     //    [self showForegroundAlert:@"Internet connection not availble to open website"];
@@ -707,7 +823,7 @@
                     if ([beacons[i] proximity] == CLProximityImmediate) {
                         NSLog(@"Immidiate Proximity: %@",beacon.proximityUUID);
                         [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:At_Beacon]];
-                        [self.tableView reloadData];
+                        //[self.tableView reloadData];
                         if ([[self.beacons[j] event] integerValue]==1) {
                             NSLog(@"Close Event matched");
                             [self performAction:[self.beacons[j] action]];
@@ -716,7 +832,7 @@
                     else if ([beacons[i] proximity] == CLProximityNear) {
                         NSLog(@"Near Proximity: %@",beacon.proximityUUID);
                         [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:NEAR]];
-                        [self.tableView reloadData];
+                        //[self.tableView reloadData];
                         if ([[self.beacons[j] event] integerValue]==2) {
                             NSLog(@"Near Event matched");
                             [self performAction:[self.beacons[j] action]];
@@ -725,12 +841,12 @@
                     else if ([beacons[i] proximity] == CLProximityFar) {
                         NSLog(@"Far Proximity: %@",beacon.proximityUUID);
                         [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:FAR]];
-                        [self.tableView reloadData];
+                        //[self.tableView reloadData];
                     }
                     else if ([beacons[i] proximity] == CLProximityUnknown) {
                         NSLog(@"Unknown Proximity: %@",beacon.proximityUUID);
                         [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:UNKNOWN]];
-                        [self.tableView reloadData];
+                        //[self.tableView reloadData];
                         
                     }
                     
@@ -786,7 +902,7 @@
             ([(Beacon *)self.beacons[index] event])) {
             NSLog(@"*******Beaon found with Exit or Enter Event Now changing Ranging Status to nil ***********");
             [self.beaconsRange replaceObjectAtIndex:index withObject:[NSNull null]];
-            [self.tableView reloadData];
+            //[self.tableView reloadData];
             if ([self.beacons[index] event]==event) {
                 if ([[self.beacons[index] action] isEqualToString:@"Show Mona Lisa"]) {
                     NSLog(@"showMonalisa");
