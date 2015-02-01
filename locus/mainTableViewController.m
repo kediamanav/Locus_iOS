@@ -22,7 +22,6 @@
 @property NSString *beaconNameDetail;
 @property (nonatomic, strong)NSArray *beacons;
 @property (strong, nonatomic) BeaconDatabase *database;
-@property (strong, nonatomic) NSUUID *beaconUUID;
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 @property (strong, nonatomic) NSMutableArray *regions;
 @property (strong, nonatomic) NSMutableArray *beaconsRange;
@@ -95,7 +94,7 @@
 
 
 -(void) regionCreators{
-    [super viewWillAppear:YES];
+    //[super viewWillAppear:YES];
     NSLog(@"regionCreator Beacons");
     
     /*

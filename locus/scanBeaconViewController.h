@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "AddBeaconViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface scanBeaconViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface scanBeaconViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate>
 - (IBAction) unwindToScanBeacon:(UIStoryboardSegue *) segue;
 @property NSString *user_name;
+@property(strong, nonatomic) CLLocationManager *locationManager;
+
 @end
