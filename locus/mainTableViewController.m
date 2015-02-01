@@ -632,8 +632,8 @@
     // Configure the cell...
     beaconClass *curItem = [self.items objectAtIndex:indexPath.row];
     cell.nameLabel.text = curItem.name;
-    //cell.lastTrackedLabel.text = [self getBeaconRange:[self.beaconsRange objectAtIndex:indexPath.row]];
-    cell.lastTrackedLabel.text=curItem.lastTracked;
+    cell.lastTrackedLabel.text = [self getBeaconRange:[self.beaconsRange objectAtIndex:indexPath.row]];
+    //cell.lastTrackedLabel.text=curItem.lastTracked;
     
     PhotoRecord *aRecord = [self.photos objectAtIndex:indexPath.row];
     NSLog(@"LoadFromLocal from phptorecord: %d",aRecord.loadFromLocal);
@@ -860,7 +860,7 @@
                     if ([beacons[i] proximity] == CLProximityImmediate) {
                         NSLog(@"Immidiate Proximity: %@",beacon.proximityUUID);
                         [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:At_Beacon]];
-                        //[self.tableView reloadData];
+                        //[self reloadTableData];
                         if ([[self.beacons[j] event] integerValue]==1) {
                             NSLog(@"Close Event matched");
                             [self performAction:[self.beacons[j] action]];
@@ -869,7 +869,7 @@
                     else if ([beacons[i] proximity] == CLProximityNear) {
                         NSLog(@"Near Proximity: %@",beacon.proximityUUID);
                         [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:NEAR]];
-                        //[self.tableView reloadData];
+                        //[self reloadTableData];
                         if ([[self.beacons[j] event] integerValue]==2) {
                             NSLog(@"Near Event matched");
                             [self performAction:[self.beacons[j] action]];
@@ -878,13 +878,12 @@
                     else if ([beacons[i] proximity] == CLProximityFar) {
                         NSLog(@"Far Proximity: %@",beacon.proximityUUID);
                         [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:FAR]];
-                        //[self.tableView reloadData];
+                        //[self reloadTableData];
                     }
                     else if ([beacons[i] proximity] == CLProximityUnknown) {
                         NSLog(@"Unknown Proximity: %@",beacon.proximityUUID);
                         [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:UNKNOWN]];
-                        //[self.tableView reloadData];
-                        
+                        //[self reloadTableData];
                     }
                     
                 }
@@ -894,6 +893,15 @@
     }
     else {
         NSLog(@"No beacon found!");
+    }
+}
+
+-(void) reloadTableData{
+    for(int i=0; i<[self.beacons count]; i++){
+        NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:i];
+        BeaconTableViewCell *cell = (BeaconTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+        cell.lastTrackedLabel.text = [self getBeaconRange:[self.beaconsRange objectAtIndex:indexPath.row]];
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

@@ -268,7 +268,6 @@ bool keyboardIsShown;
                 NSLog(@"Response ==> %@", responseData);
                 
                 
-                
                 SBJsonParser *jsonParser = [SBJsonParser new];
                 NSArray  *jsonData = [jsonParser objectWithString:responseData error:NULL];
                 
@@ -339,6 +338,7 @@ bool keyboardIsShown;
             _l_username = user.user_name;
             _l_email = user.user_email;
             _loadFromLocal = 1;
+            [self addUser];
             [self performSegueWithIdentifier:@"loggedInSegue" sender:self];
         }
     }

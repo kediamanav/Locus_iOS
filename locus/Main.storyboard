@@ -63,7 +63,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Keeper" id="Gd4-I5-jwk">
-                        <barButtonItem key="leftBarButtonItem" title="Logout" style="plain" id="MHh-8H-3Aq">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" style="done" id="MHh-8H-3Aq">
                             <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="logoutPressed:" destination="3m6-kG-VCR" id="cOd-OT-2Xs"/>
