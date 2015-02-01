@@ -235,7 +235,7 @@
     }
     [self cdh];
     //Call this to erase all the item and user data
-    [self demo];
+    //[self demo];
     
     
     Users *user=[self checkIfUserLoggedIn];

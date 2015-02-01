@@ -37,26 +37,34 @@
 - (void)main {
     
     @autoreleasepool {
+        //NSLog(@"Inside ImageDownloader");
         if(_photoRecord.itemImage==false){
             return;
         }
         if (self.isCancelled)
             return;
         
+        //NSLog(@"Before loading image data");
+        //NSURL *url = [NSURL URLWithString:@"http://locus-trak.rhcloud.com/public/itemImages/kediamanav_nrf%20beacon.jpg"];
+        //NSLog(@"URL : %@",[self.photoRecord.URL absoluteString]);
+        //NSLog(@"URL : %@",url);
         NSData *imageData = [[NSData alloc] initWithContentsOfURL:self.photoRecord.URL];
         self.photoRecord.imageData = imageData;
         
         if (self.isCancelled) {
             imageData = nil;
+            NSLog(@"Image loading cancelled");
             return;
         }
         
         if (imageData) {
             UIImage *downloadedImage = [UIImage imageWithData:imageData];
             self.photoRecord.image = downloadedImage;
+            NSLog(@"Download successful");
         }
         else {
             self.photoRecord.failed = YES;
+            NSLog(@"Download failed");
         }
         
         imageData = nil;

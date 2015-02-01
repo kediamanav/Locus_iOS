@@ -8,6 +8,7 @@
 
 #import "scanBeaconViewController.h"
 #import "Utility.h"
+#import "AppDelegate.h"
 
 @interface scanBeaconViewController (){
 BOOL isAppInBackground;
@@ -85,13 +86,6 @@ BOOL isAppInBackground;
     [super viewWillAppear:YES];
     NSLog(@"viewDidAppear Beacons");
     
-    /*
-     * Create Regions for each unique Beacon UUID provided in the app and these should be fixed and known
-     * and assign each region unique identifier
-     * if Beacon is saved with one of these provided UUIDs then register Region having that UUID
-     * Unregister Region if there is not any saved or enabled Beacon found having that UUID
-     */
-    
     for(int regionIndex = 0; regionIndex < [[Utility getBeaconsUUIDS]count]; regionIndex++ )
     {
         
@@ -118,22 +112,14 @@ BOOL isAppInBackground;
         }*/
             
     }
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActiveBackground:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 
--(void)appDidEnterBackground:(NSNotification *)_notification
-{
-    isAppInBackground = YES;
-    NSLog(@"App is in background");
-}
-
--(void)appDidBecomeActiveBackground:(NSNotification *)_notification
-{
-    isAppInBackground = NO;
-    NSLog(@"App is in foreground");
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+- (NSManagedObjectContext *)managedObjectContext{
+    NSManagedObjectContext *context = nil;
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    context = delegate.coreDataHelper.managedObjectContext;
+    return context;
 }
 
 
@@ -240,9 +226,23 @@ BOOL isAppInBackground;
             if([beacons[i] proximity] != CLProximityUnknown){
                 [self.beaconTable reloadData];
                 //Add to the data to be displayed in the tables
-                [self.uuid addObject:[[beacons[i] proximityUUID] UUIDString]];
-                [self.major addObject:[beacons[i] major]];
-                [self.minor addObject:[beacons[i] minor]];
+                
+                NSManagedObjectContext *_context = [self managedObjectContext];
+                NSEntityDescription *entityDesc = [NSEntityDescription entityForName:@"Beacon" inManagedObjectContext:_context];
+                NSFetchRequest *request = [[NSFetchRequest alloc]init];
+                [request setEntity:entityDesc];
+                NSPredicate *predSearch = [NSPredicate predicateWithFormat:@"(uuid = %@) AND (major = %@) AND (minor = %@)"
+                                           ,[[beacons[i] proximityUUID] UUIDString],[[beacons[i] major] stringValue],[[beacons[i] minor] stringValue]];
+                [request setPredicate:predSearch];
+                NSError *error;
+                NSArray *matchingRecords = [_context executeFetchRequest:request error:&error];
+                if (matchingRecords.count==0) {
+                    if (!([self.uuid containsObject:[[beacons[i] proximityUUID] UUIDString]] && [self.major containsObject:[beacons[i] major]] && [self.minor containsObject:[beacons[i] minor]])){
+                        [self.uuid addObject:[[beacons[i] proximityUUID] UUIDString]];
+                        [self.major addObject:[beacons[i] major]];
+                        [self.minor addObject:[beacons[i] minor]];
+                    }
+                }
             }
         }
         

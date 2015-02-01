@@ -363,8 +363,9 @@
                 NSString *pictureURL = [item objectForKey:@"item_picture"];
                 PhotoRecord *record = [[PhotoRecord alloc] init];
                 if(![pictureURL isEqual: [NSNull null]]){
-                    record.URL = [NSURL URLWithString:pictureURL];
-                    NSLog(@"pictureURL: %@",pictureURL);
+                    NSString *urlString = [pictureURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                    record.URL = [NSURL URLWithString:urlString];
+                    NSLog(@"pictureURL: %@,",[record.URL absoluteString]);
                     record.itemImage = true;
                 }
                 else{
@@ -691,7 +692,9 @@
 
 - (void)startImageDownloadingForRecord:(PhotoRecord *)record atIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%ld",(long)indexPath.row);
+    NSLog(@"Inside the startImageDownloadingForRecord function");
     if (![self.pendingOperations.downloadsInProgress.allKeys containsObject:indexPath]) {
+        NSLog(@"URL : %@",[record.URL absoluteString]);
         ImageDownloader *imageDownloader = [[ImageDownloader alloc] initWithPhotoRecord:record atIndexPath:indexPath delegate:self];
         [self.pendingOperations.downloadsInProgress setObject:imageDownloader forKey:indexPath];
         [self.pendingOperations.downloadQueue addOperation:imageDownloader];

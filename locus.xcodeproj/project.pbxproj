@@ -16,6 +16,9 @@
 		5008E9251A77E9C400189481 /* ActionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E9241A77E9C400189481 /* ActionTableViewCell.m */; };
 		5008E9271A77FCCD00189481 /* Monalisa.png in Resources */ = {isa = PBXBuildFile; fileRef = 5008E9261A77FCCD00189481 /* Monalisa.png */; };
 		5008E92D1A7809AD00189481 /* BeaconDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008E92C1A7809AD00189481 /* BeaconDatabase.m */; };
+		5009F6991A7ED3BB006B17C4 /* app_icon1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5009F6961A7ED3BB006B17C4 /* app_icon1.png */; };
+		5009F69A1A7ED3BB006B17C4 /* app_icon2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5009F6971A7ED3BB006B17C4 /* app_icon2.png */; };
+		5009F69B1A7ED3BB006B17C4 /* app_icon3.png in Resources */ = {isa = PBXBuildFile; fileRef = 5009F6981A7ED3BB006B17C4 /* app_icon3.png */; };
 		500DE8771A7576EA0095BD9C /* TrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 500DE8761A7576EA0095BD9C /* TrackViewController.m */; };
 		500DE87A1A758AA20095BD9C /* 2-23-030_HMA121.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE8781A758AA20095BD9C /* 2-23-030_HMA121.png */; };
 		500DE87B1A758AA20095BD9C /* camera-iphone-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE8791A758AA20095BD9C /* camera-iphone-icon.png */; };
@@ -128,6 +131,9 @@
 		5008E9261A77FCCD00189481 /* Monalisa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Monalisa.png; sourceTree = "<group>"; };
 		5008E92B1A7809AD00189481 /* BeaconDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconDatabase.h; sourceTree = "<group>"; };
 		5008E92C1A7809AD00189481 /* BeaconDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconDatabase.m; sourceTree = "<group>"; };
+		5009F6961A7ED3BB006B17C4 /* app_icon1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon1.png; sourceTree = "<group>"; };
+		5009F6971A7ED3BB006B17C4 /* app_icon2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon2.png; sourceTree = "<group>"; };
+		5009F6981A7ED3BB006B17C4 /* app_icon3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_icon3.png; sourceTree = "<group>"; };
 		500DE8751A7576EA0095BD9C /* TrackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackViewController.h; sourceTree = "<group>"; };
 		500DE8761A7576EA0095BD9C /* TrackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackViewController.m; sourceTree = "<group>"; };
 		500DE8781A758AA20095BD9C /* 2-23-030_HMA121.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "2-23-030_HMA121.png"; path = "../../../../../../Downloads/2-23-030_HMA121.png"; sourceTree = "<group>"; };
@@ -493,6 +499,9 @@
 		50201D921A713EF200C4442A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5009F6971A7ED3BB006B17C4 /* app_icon2.png */,
+				5009F6961A7ED3BB006B17C4 /* app_icon1.png */,
+				5009F6981A7ED3BB006B17C4 /* app_icon3.png */,
 				5008E9261A77FCCD00189481 /* Monalisa.png */,
 				5014E9B11A77AE0B003F4ACC /* Alarm.png */,
 				5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */,
@@ -629,10 +638,12 @@
 				500DE87F1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png in Resources */,
 				50201DB41A713EF200C4442A /* Extra1.png in Resources */,
 				50201DAA1A713EF200C4442A /* Add item_2.png in Resources */,
+				5009F69B1A7ED3BB006B17C4 /* app_icon3.png in Resources */,
 				5014E9BB1A77AE0B003F4ACC /* OutRange.png in Resources */,
 				50201DBD1A713EF200C4442A /* Track_1.png in Resources */,
 				5008E9271A77FCCD00189481 /* Monalisa.png in Resources */,
 				50201D8C1A71361800C4442A /* Images.xcassets in Resources */,
+				5009F69A1A7ED3BB006B17C4 /* app_icon2.png in Resources */,
 				50201DB61A713EF200C4442A /* item_default.png in Resources */,
 				50201DB51A713EF200C4442A /* item1.jpg in Resources */,
 				50201DAC1A713EF200C4442A /* Default.png in Resources */,
@@ -646,6 +657,7 @@
 				50201DAB1A713EF200C4442A /* common_bg.jpg in Resources */,
 				50201DB31A713EF200C4442A /* Default@2x.png in Resources */,
 				50201DB21A713EF200C4442A /* Default@2x-7.png in Resources */,
+				5009F6991A7ED3BB006B17C4 /* app_icon1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
