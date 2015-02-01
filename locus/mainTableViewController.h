@@ -18,13 +18,15 @@
 #import "PendingOperations.h"
 #import "AFNetworking.h"
 #import "TrackViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface mainTableViewController : UITableViewController <ImageDownloaderDelegate>
+@interface mainTableViewController : UITableViewController <ImageDownloaderDelegate, CLLocationManagerDelegate>
 - (IBAction) unwindToList:(UIStoryboardSegue *) segue;
 @property NSMutableArray *items;
 @property (nonatomic, strong) NSMutableArray *photos;
 @property (nonatomic, strong) NSString *user_name;
 @property NSInteger loadFromLocal;
 @property (nonatomic, strong) PendingOperations *pendingOperations;
+@property(strong, nonatomic) CLLocationManager *locationManager;
 
 @end

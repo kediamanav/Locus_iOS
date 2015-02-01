@@ -28,6 +28,7 @@
 		5014E9BA1A77AE0B003F4ACC /* NearRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B41A77AE0B003F4ACC /* NearRange.png */; };
 		5014E9BB1A77AE0B003F4ACC /* OutRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B51A77AE0B003F4ACC /* OutRange.png */; };
 		5014E9BC1A77AE0B003F4ACC /* Website.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B61A77AE0B003F4ACC /* Website.png */; };
+		501CFD6D1A7E27EA005BDECC /* low.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 501CFD6C1A7E27EA005BDECC /* low.aiff */; };
 		5020190B1A712D9100C4442A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5020190A1A712D9100C4442A /* main.m */; };
 		5020190E1A712D9100C4442A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5020190D1A712D9100C4442A /* AppDelegate.m */; };
 		502019251A712D9100C4442A /* locusTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 502019241A712D9100C4442A /* locusTests.m */; };
@@ -140,6 +141,7 @@
 		5014E9B41A77AE0B003F4ACC /* NearRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NearRange.png; sourceTree = "<group>"; };
 		5014E9B51A77AE0B003F4ACC /* OutRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OutRange.png; sourceTree = "<group>"; };
 		5014E9B61A77AE0B003F4ACC /* Website.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Website.png; sourceTree = "<group>"; };
+		501CFD6C1A7E27EA005BDECC /* low.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = low.aiff; sourceTree = "<group>"; };
 		502019051A712D9100C4442A /* locus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = locus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		502019091A712D9100C4442A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5020190A1A712D9100C4442A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -334,10 +336,10 @@
 				500803501A766C6D00F96E5D /* ActionTableViewController.m */,
 				500803551A766DAC00F96E5D /* Utility.h */,
 				500803561A766DAC00F96E5D /* Utility.m */,
-				50201D8B1A71361800C4442A /* Images.xcassets */,
-				50201D921A713EF200C4442A /* Images */,
 				50201D081A7131CF00C4442A /* beaconClass.h */,
 				50201D091A7131CF00C4442A /* beaconClass.m */,
+				50201D8B1A71361800C4442A /* Images.xcassets */,
+				50201D921A713EF200C4442A /* Images */,
 				502019081A712D9100C4442A /* Supporting Files */,
 			);
 			path = locus;
@@ -346,6 +348,7 @@
 		502019081A712D9100C4442A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				501CFD6C1A7E27EA005BDECC /* low.aiff */,
 				502019091A712D9100C4442A /* Info.plist */,
 				5020190A1A712D9100C4442A /* main.m */,
 			);
@@ -628,6 +631,7 @@
 				50201DB61A713EF200C4442A /* item_default.png in Resources */,
 				50201DB51A713EF200C4442A /* item1.jpg in Resources */,
 				50201DAC1A713EF200C4442A /* Default.png in Resources */,
+				501CFD6D1A7E27EA005BDECC /* low.aiff in Resources */,
 				5014E9B71A77AE0B003F4ACC /* Alarm.png in Resources */,
 				50201D281A7131CF00C4442A /* BeaconCell.xib in Resources */,
 				50201DAE1A713EF200C4442A /* Default@2x-2.png in Resources */,

@@ -7,17 +7,32 @@
 //
 
 #import "mainTableViewController.h"
+#import <AVFoundation/AVFoundation.h>
+#import "Utility.h"
+#import "BeaconDatabase.h"
+#import "Beacon.h"
 
-@interface mainTableViewController ()
+@interface mainTableViewController (){
+    BOOL isAppInBackground, isActionPerformed;
+}
+
 @property NSInteger totalItems;
 @property NSInteger itemsLoaded;
 @property UIImage *beaconImageDetail;
 @property NSString *beaconNameDetail;
+@property (nonatomic, strong)NSArray *beacons;
+@property (strong, nonatomic) BeaconDatabase *database;
+@property (strong, nonatomic) NSUUID *beaconUUID;
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
+@property (strong, nonatomic) NSMutableArray *regions;
+@property (strong, nonatomic) NSMutableArray *beaconsRange;
 @end
 
 @implementation mainTableViewController
 
 @synthesize user_name;
+@synthesize locationManager;
+@synthesize audioPlayer;
 @synthesize pendingOperations = _pendingOperations;
 
 /* To recover the managed context object from the app delegate*/
@@ -40,6 +55,32 @@
     
     //Allocate the array
     self.items = [[NSMutableArray alloc] init];
+    
+    //Initialize locationManager
+    self.database = [[BeaconDatabase alloc]init];
+    locationManager = [[CLLocationManager alloc]init];
+    if([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        [self.locationManager requestAlwaysAuthorization];
+    }
+    self.locationManager.pausesLocationUpdatesAutomatically = NO;
+    locationManager.delegate = self;
+    isAppInBackground = NO;
+    [self initSound];
+    self.regions = [[NSMutableArray alloc]initWithCapacity:[[Utility getBeaconsUUIDS] count]];
+    for (int index = 0; index < [[Utility getBeaconsUUIDS] count]; index++)
+    {
+        [self.regions addObject:[NSNull null]];
+    }
+    
+    self.beacons = [self.database readAllBeacons];
+    NSLog(@"Number of beacons found : %lu",(unsigned long)[self.beacons count]);
+    isActionPerformed = NO;
+    self.beaconsRange = [[NSMutableArray alloc] initWithCapacity:[self.beacons count]];
+    for (int index = 0; index < [self.beacons  count]; index++)
+    {
+        [self.beaconsRange addObject:[NSNull null]];
+    }
+    
     //Call the function to load the array data for the table
     [self loadTableData];
     
@@ -49,13 +90,113 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
--(void) viewDidUnload{
-    [self setPendingOperations:nil];
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    NSLog(@"viewWillAppear Beacons");
+    
+    
+    
+    /*
+     * Create Regions for each unique Beacon UUID provided in the app and these should be fixed and known
+     * and assign each region unique identifier
+     * if Beacon is saved with one of these provided UUIDs then register Region having that UUID
+     * Unregister Region if there is not any saved or enabled Beacon found having that UUID
+     */
+    
+    for(int regionIndex = 0; regionIndex < [[Utility getBeaconsUUIDS]count]; regionIndex++ )
+    {
+        BOOL isBeaconFound = NO;
+        BOOL isLeashEnable = NO;
+        
+        
+        
+        
+        for(int beaconIndex = 0; beaconIndex < [self.beacons count]; beaconIndex++)
+        {
+            NSLog(@"Before checking UUID's");
+            if ([[[[Utility getBeaconsUUIDS] objectAtIndex:regionIndex] UUIDString] caseInsensitiveCompare:[[self.beacons objectAtIndex:beaconIndex]uuid]]==NSOrderedSame) {
+                isBeaconFound = YES;
+                if ([(Beacon *)[self.beacons objectAtIndex:beaconIndex]event]) {
+                    isLeashEnable = YES;
+                }
+            }
+        }
+        //if Beacon/Beacons Found in Region (regionIndex) and
+        //atleast one Beacon is enabled in that Region then check the corresponding Region
+        // if Region is not exist already then create Region and start Monitoring and Ranging
+        if (isBeaconFound && isLeashEnable) {
+            NSLog(@"Atleast one Beacon is enable in Region %d with UUID %@",regionIndex, [[[Utility getBeaconsUUIDS]objectAtIndex:regionIndex]UUIDString]);
+            if ([[self.regions objectAtIndex:regionIndex] isEqual:[NSNull null]]) {
+                NSLog(@"Creating Region %d with UUID %@",regionIndex,[[[Utility getBeaconsUUIDS]objectAtIndex:regionIndex]UUIDString]);
+                [self.regions replaceObjectAtIndex:regionIndex withObject:[Utility getRegionAtIndex:regionIndex]];
+                [locationManager startMonitoringForRegion:[self.regions objectAtIndex:regionIndex]];
+                [locationManager startRangingBeaconsInRegion:[self.regions objectAtIndex:regionIndex]];
+            }
+            else {
+                NSLog(@"Region %d already exist with UUID %@",regionIndex,[[[Utility getBeaconsUUIDS]objectAtIndex:regionIndex]UUIDString]);
+            }
+            
+        }
+        // if NO Beacon found or No Beacon is enable in Region (regionIndex) then check the corresponding Region
+        // if Region exist already then stop Monitoring and Ranging and assign nil to Region
+        else {
+            NSLog(@"No beacon is found or enable in Region %d with UUID %@",regionIndex,[[[Utility getBeaconsUUIDS]objectAtIndex:regionIndex]UUIDString]);
+            
+            if (![[self.regions objectAtIndex:regionIndex] isEqual:[NSNull null]]) {
+                NSLog(@"Region %d with UUID %@ already exist and now removing it",regionIndex, [[[Utility getBeaconsUUIDS]objectAtIndex:regionIndex]UUIDString]);
+                [locationManager stopMonitoringForRegion:[self.regions objectAtIndex:regionIndex]];
+                [locationManager stopRangingBeaconsInRegion:[self.regions objectAtIndex:regionIndex]];
+                [self.regions replaceObjectAtIndex:regionIndex withObject:[NSNull null]];
+            }
+        }
+    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActiveBackground:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
-- (void)didReceiveMemoryWarning {
+
+-(void)appDidEnterBackground:(NSNotification *)_notification
+{
+    isAppInBackground = YES;
+    NSLog(@"App is in background");
+}
+
+-(void)appDidBecomeActiveBackground:(NSNotification *)_notification
+{
+    isAppInBackground = NO;
+    NSLog(@"App is in foreground");
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+}
+
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void) initSound
+{
+    NSError *error  = nil;
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
+    [[AVAudioSession sharedInstance] setActive:YES error:&error];
+    NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"low" ofType:@"aiff"]];
+    audioPlayer = [[AVAudioPlayer alloc]
+                   initWithContentsOfURL:url
+                   error:&error];
+    if (error)
+    {
+        NSLog(@"Error in audioPlayer: %@",
+              [error localizedDescription]);
+    } else {
+        [audioPlayer prepareToPlay];
+    }
+}
+
+
+-(void) viewDidUnload{
+    [self setPendingOperations:nil];
 }
 
 
@@ -164,123 +305,6 @@
     NSLog(@"After table reload");
 
 }
-
-/*
--(void) loadFromGlobalDatabase{
-    @try {
-        
-        if([user_name isEqualToString:@""]) {
-            [self alertStatus:@"Not logged in" :@"Error!"];
-        } else {
-            NSString *post =[[NSString alloc] initWithFormat:@"user_name=%@",user_name];
-            NSLog(@"PostData: %@",post);
-            
-            NSURL *url=[NSURL URLWithString:@"http://localhost/~kediamanav/login/getUserItems"];
-            NSURL *url=[NSURL URLWithString:@"http://locus-trak.rhcloud.com/login/getUserItems"];
- 
-            NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-            
-            NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-            
-            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-            [request setURL:url];
-            [request setHTTPMethod:@"POST"];
-            [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-            [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-            [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-            [request setHTTPBody:postData];
-            
-            //[NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:[url host]];
-
-            NSError *error = [[NSError alloc] init];
-            NSHTTPURLResponse *response = nil;
-            NSData *urlData=[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-            
-            NSLog(@"Response code: %ld", (long)[response statusCode]);
-            if ([response statusCode] >=200 && [response statusCode] <300)
-            {
-                NSString *responseData = [[NSString alloc]initWithData:urlData encoding:NSUTF8StringEncoding];
-                //NSLog(@"Response ==> %@", responseData);
-                
-                SBJsonParser *jsonParser = [SBJsonParser new];
-                NSArray  *itemList = [jsonParser objectWithString:responseData error:NULL];
-                
-                //NSLog(@"%@",itemList);
-                
-                for (NSDictionary *item in itemList){
-                    
-                    // Now add it to the CoreData database also
-                    //Add to persistent store here
-                    NSManagedObjectContext *context = [self managedObjectContext];
-                    Items *newItem = [NSEntityDescription insertNewObjectForEntityForName:@"Items" inManagedObjectContext:context];
-                    
-                    beaconClass *item1=[[beaconClass alloc] init];
-                    item1.name = [item objectForKey:@"item_name"];
-                    item1.lastTracked = [item objectForKey:@"item_lastTracked"];
-                    
-                    NSString *pictureURL = [item objectForKey:@"item_picture"];
-                    PhotoRecord *record = [[PhotoRecord alloc] init];
-                    if(![pictureURL isEqual: [NSNull null]]){
-                        record.URL = [NSURL URLWithString:pictureURL];
-                        NSLog(@"pictureURL: %@",pictureURL);
-                        [_photos addObject:record];
-                        record = nil;
-                    }
-                    
-                    item1.imageURL = pictureURL;
-                    */
-                    /*
-                     Extracting images from the server in the difficult way, using base64 encoding
-                     NSString *item_data = [item objectForKey:@"item_picture"];
-                     //NSLog(@"item_data: %@",item_data);
-                     if([item_data isEqual: [NSNull null]]){
-                     item1.imageData = [UIImage imageNamed:@"item_default.png"];
-                     newItem.item_picture = [[NSData alloc] init];
-                     }
-                     else{
-                     NSData *pictureData =[[NSData alloc] initWithBase64EncodedString:item_data options:0];
-                     //NSLog(@"%@",pictureData);
-                     item1.imageData = [UIImage imageWithData:pictureData];
-                     newItem.item_picture = pictureData;
-                     }
-                     //item1.imageData = [UIImage imageNamed:@"item_default.png"];
-                     */
-                    
-                    /*[self.items addObject:item1];
-                    NSLog(@"Name: %@, Last-tracked: %@",item1.name, item1.lastTracked);
-                    
-                    
-                    newItem.user_name = user_name;
-                    newItem.item_name = [item objectForKey:@"item_name"];
-                    newItem.item_description = [item objectForKey:@"item_description"];
-                    newItem.item_macAddress = [item objectForKey:@"item_macAddress"];
-                    //newItem.item_id = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_id"] integerValue]];
-                    newItem.item_isLost = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_isLost"] integerValue]];
-                    newItem.item_eLeashRange = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_eLeashRange"] integerValue]];
-                    newItem.item_eLeashOn = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_eLeashOn"] integerValue]];
-                    newItem.item_DOB = [item objectForKey:@"item_DOB"];
-                    newItem.item_lastTracked = [item objectForKey:@"item_lastTracked"];
-                    
-                    //Now save the context
-                    NSError *error = nil;
-                    // Save the object to persistent store
-                    if (![context save:&error]) {
-                        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
-                    }
-                    
-                }
-            } else {
-                if (error) NSLog(@"Error: %@", error);
-                [self alertStatus:@"Retriving data failed" :@"Failed to retrieve data"];
-            }
-        }
-    }
-    @catch (NSException * e) {
-        NSLog(@"Exception: %@", e);
-        [self alertStatus:@"Retriving data failed" :@"Failed to retrieve data"];
-    }
-}
-*/
 
 /*
  ** Load from the global database and also add to the local database
@@ -457,7 +481,8 @@
     // Configure the cell...
     beaconClass *curItem = [self.items objectAtIndex:indexPath.row];
     cell.nameLabel.text = curItem.name;
-    cell.lastTrackedLabel.text=curItem.lastTracked;
+    //cell.lastTrackedLabel.text = [self getBeaconRange:[self.beaconsRange objectAtIndex:indexPath.row]];
+    //cell.lastTrackedLabel.text=curItem.lastTracked;
     
     PhotoRecord *aRecord = [self.photos objectAtIndex:indexPath.row];
     NSLog(@"LoadFromLocal from phptorecord: %d",aRecord.loadFromLocal);
@@ -542,40 +567,6 @@
     [self performSegueWithIdentifier:@"BeaconDetailSegue" sender:self];
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 - (void)startOperationsForPhotoRecord:(PhotoRecord *)record atIndexPath:(NSIndexPath *)indexPath {
 
     if (!record.hasImage) {
@@ -598,6 +589,251 @@
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [self.pendingOperations.downloadsInProgress removeObjectForKey:indexPath];
 }
+
+
+-(NSString *)getBeaconRange:(NSNumber *)range
+{
+    if ([range isEqual:[NSNull null]]) {
+        return @"Beacon Not Found";
+    }
+    switch([range intValue]) {
+        case 0:
+            return @"At beacon";
+        case 1:
+            return @"Near";
+        case 2:
+            return @"Far";
+        case 3:
+            return @"Unknown";
+        default:
+            return @"Invalid Location";
+    }
+    
+}
+
+-(void)showBackgroundAlert:(NSString *)message
+{
+    UILocalNotification *notification = [[UILocalNotification alloc]init];
+    notification.alertAction = @"Show";
+    notification.alertBody = message;
+    notification.hasAction = NO;
+    notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:1];
+    notification.timeZone = [NSTimeZone  defaultTimeZone];
+    notification.soundName = UILocalNotificationDefaultSoundName;
+    [[UIApplication sharedApplication] setScheduledLocalNotifications:[NSArray arrayWithObject:notification]];
+}
+
+-(void)showForegroundAlert:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"nRF Beacons" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
+}
+
+
+- (void)showMonalisa
+{
+    [self performSegueWithIdentifier:@"MonalisaSegue" sender:self];
+}
+
+- (void)openWebsite
+{
+    //if ([self isInternetConnectionAvailable]) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://www.nordicsemi.com"]];
+    //}
+    //else {
+    //    [self showForegroundAlert:@"Internet connection not availble to open website"];
+    //}
+}
+
+- (void)playAlarm
+{
+    [audioPlayer play];
+}
+
+#pragma mark - CLLocationManager delegates
+
+-(void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
+{
+    NSLog(@"*****didEnterRegion******");
+    
+    [self performActionForEvent:[NSNumber numberWithInt:4] withIdentifier:region.identifier];
+}
+
+-(void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
+{
+    NSLog(@"***********didExitRegion***********");
+    [self performActionForEvent:[NSNumber numberWithInt:3] withIdentifier:region.identifier];
+}
+
+-(void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
+{
+    NSLog(@"didStartMonitoringForRegion");
+    
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"didFailWithError");
+}
+
+-(void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
+{
+    NSLog(@"didRangeBeacons");
+    if ([beacons count] > 0) {
+        NSLog(@"beacons founds: %lu",(unsigned long)[beacons count]);
+        CLBeacon *beacon = [beacons objectAtIndex:0];
+        
+        
+        NSLog(@"Beacons UUID: %@",beacon.proximityUUID);
+        NSLog(@"Beacons Major: %@",beacon.major);
+        NSLog(@"Beacons Minor: %@",beacon.minor);
+        
+        
+        for(int i = 0; i < [beacons count]; i++) //scanned beacons in Ranging
+        {
+            for(int j=0; j<[self.beacons count]; j++) //stored beacons in database
+            {
+                if (([[[beacons[i] proximityUUID] UUIDString] caseInsensitiveCompare:[self.beacons[j] uuid]]==NSOrderedSame) &&
+                    ([[beacons[i] major] integerValue] == [[self.beacons[j] major] integerValue]) &&
+                    ([[beacons[i] minor] integerValue] == [[self.beacons[j] minor] integerValue]) &&
+                    ([(Beacon *)self.beacons[j] event]))
+                {
+                    NSLog(@"Found Beacon and enabled");
+                    NSLog(@"Beacon UUID: %@",[beacons[i] proximityUUID]);
+                    NSLog(@"Beacon Major: %@",[beacons[i] major]);
+                    NSLog(@"Beacon Minor: %@",[beacons[i] minor]);
+                    
+                    //Finding Scanned Beacon Proximity and converting it to the Event of stored Beacon
+                    if ([beacons[i] proximity] == CLProximityImmediate) {
+                        NSLog(@"Immidiate Proximity: %@",beacon.proximityUUID);
+                        [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:At_Beacon]];
+                        [self.tableView reloadData];
+                        if ([[self.beacons[j] event] integerValue]==1) {
+                            NSLog(@"Close Event matched");
+                            [self performAction:[self.beacons[j] action]];
+                        }
+                    }
+                    else if ([beacons[i] proximity] == CLProximityNear) {
+                        NSLog(@"Near Proximity: %@",beacon.proximityUUID);
+                        [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:NEAR]];
+                        [self.tableView reloadData];
+                        if ([[self.beacons[j] event] integerValue]==2) {
+                            NSLog(@"Near Event matched");
+                            [self performAction:[self.beacons[j] action]];
+                        }
+                    }
+                    else if ([beacons[i] proximity] == CLProximityFar) {
+                        NSLog(@"Far Proximity: %@",beacon.proximityUUID);
+                        [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:FAR]];
+                        [self.tableView reloadData];
+                    }
+                    else if ([beacons[i] proximity] == CLProximityUnknown) {
+                        NSLog(@"Unknown Proximity: %@",beacon.proximityUUID);
+                        [self.beaconsRange replaceObjectAtIndex:j withObject:[NSNumber numberWithInt:UNKNOWN]];
+                        [self.tableView reloadData];
+                        
+                    }
+                    
+                }
+            }
+        }
+        
+    }
+    else {
+        NSLog(@"No beacon found!");
+    }
+}
+
+//Perform actions on Ranging Events Near and Close
+- (void)performAction:(NSNumber *)action
+{
+    NSLog(@"Action number: %ld",(long)[action integerValue]);
+    if(!isActionPerformed) {
+        if([action integerValue]==1) {
+            NSLog(@"showMonalisa");
+            if (isAppInBackground) {
+                [self showBackgroundAlert:@"Mona Lisa"];
+            }
+            [self showMonalisa];
+            isActionPerformed = YES;
+        }
+        else if([action integerValue]==2) {
+            NSLog(@"Open Website");
+            [self openWebsite];
+            if (isAppInBackground) {
+                [self showBackgroundAlert:@"Nordic Semiconductor"];
+            }
+            isActionPerformed = YES;
+        }
+        else if([action integerValue]==3) {
+            NSLog(@"Playing Alarm");
+            [self playAlarm];
+            if (isAppInBackground) {
+                [self showBackgroundAlert:@"Playing Alarm"];
+            }
+        }
+    }
+}
+
+//Perform actions for Regions event Enter and Exit
+- (void)performActionForEvent:(NSNumber *)event withIdentifier:(NSString *)identifier
+{
+    NSString *regionUUIDFromIdentifier = [self getRegionUUIDFromIdentifier:identifier];
+    NSLog(@"Performing action for event: %@ RegionUUID %@",event,regionUUIDFromIdentifier);
+    for(int index = 0; index < [self.beacons count]; index ++)
+    {
+        if (([regionUUIDFromIdentifier caseInsensitiveCompare:[self.beacons[index] uuid]]==NSOrderedSame)  &&
+            ([(Beacon *)self.beacons[index] event])) {
+            NSLog(@"*******Beaon found with Exit or Enter Event Now changing Ranging Status to nil ***********");
+            [self.beaconsRange replaceObjectAtIndex:index withObject:[NSNull null]];
+            [self.tableView reloadData];
+            if ([self.beacons[index] event]==event) {
+                if ([[self.beacons[index] action] isEqualToString:@"Show Mona Lisa"]) {
+                    NSLog(@"showMonalisa");
+                    if (isAppInBackground) {
+                        [self showBackgroundAlert:@"Mona Lisa"];
+                    }
+                    [self showMonalisa];
+                    return;
+                }
+                else if ([[self.beacons[index] action] isEqualToString:@"Open Website"]) {
+                    NSLog(@"Open Website");
+                    if (isAppInBackground) {
+                        [self showBackgroundAlert:@"Nordic Semiconductor ASA"];
+                    }
+                    [self openWebsite];
+                    return;
+                }
+                else if ([[self.beacons[index] action] isEqualToString:@"Play Alarm"]) {
+                    NSLog(@"Playing Alarm");
+                    if (isAppInBackground) {
+                        [self showBackgroundAlert:@"Playing Alarm"];
+                    }
+                    [self playAlarm];
+                    return;
+                }
+            }
+        }
+    }
+}
+
+- (NSString *) getRegionUUIDFromIdentifier:(NSString *)regionIdentifier
+{
+    if ([regionIdentifier isEqualToString:@"Nordic Semiconductor ASA 1"]) {
+        return [[[Utility getBeaconsUUIDS]objectAtIndex:0]UUIDString];
+    }
+    else if ([regionIdentifier isEqualToString:@"Nordic Semiconductor ASA 2"]) {
+        return [[[Utility getBeaconsUUIDS]objectAtIndex:1]UUIDString];
+    }
+    else if ([regionIdentifier isEqualToString:@"Nordic Semiconductor ASA 3"]) {
+        return [[[Utility getBeaconsUUIDS]objectAtIndex:2]UUIDString];
+    }
+    else if ([regionIdentifier isEqualToString:@"Nordic Semiconductor ASA 4"]) {
+        return [[[Utility getBeaconsUUIDS]objectAtIndex:3]UUIDString];
+    }
+    return nil;
+}
+
 
 
 @end
