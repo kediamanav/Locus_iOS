@@ -63,6 +63,12 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Keeper" id="Gd4-I5-jwk">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" style="plain" id="MHh-8H-3Aq">
+                            <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="logoutPressed:" destination="3m6-kG-VCR" id="cOd-OT-2Xs"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="add" id="ncw-i7-enf">
                             <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
@@ -72,6 +78,7 @@
                     </navigationItem>
                     <connections>
                         <segue destination="P2O-EH-3cT" kind="showDetail" identifier="BeaconDetailSegue" id="dyx-fk-tfw"/>
+                        <segue destination="oIz-Tr-k2i" kind="showDetail" identifier="logoutSegue" id="xeK-Xa-KEl"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eqR-94-6KR" userLabel="First Responder" sceneMemberID="firstResponder"/>

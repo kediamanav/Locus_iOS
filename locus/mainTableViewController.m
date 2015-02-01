@@ -11,6 +11,7 @@
 #import "Utility.h"
 #import "BeaconDatabase.h"
 #import "Beacon.h"
+#import "Users.h"
 
 @interface mainTableViewController (){
     BOOL isAppInBackground, isActionPerformed;
@@ -20,6 +21,7 @@
 @property NSInteger itemsLoaded;
 @property UIImage *beaconImageDetail;
 @property NSString *beaconNameDetail;
+- (IBAction)logoutPressed:(id)sender;
 @property (nonatomic, strong)NSArray *beacons;
 @property (strong, nonatomic) BeaconDatabase *database;
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
@@ -565,6 +567,39 @@
     }
 }
 
+
+- (IBAction)logoutPressed:(id)sender {
+    
+    NSLog(@"Inside logout");
+    NSManagedObjectContext *context = [self managedObjectContext];
+    NSEntityDescription *entityDesc = [NSEntityDescription entityForName:@"Users" inManagedObjectContext:context];
+    NSFetchRequest *request = [[NSFetchRequest alloc]init];
+    [request setEntity:entityDesc];
+        
+    // For conditional fetching
+    NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@)",user_name];
+    [request setPredicate:filter];
+    
+    NSError *error = nil;
+    Users *user = nil;
+    user = [[context executeFetchRequest:request error:&error] lastObject];
+    
+    if(error){
+        NSLog(@"Can't execute fetch request! %@ %@", error, [error localizedDescription]);
+    }
+    if(user){
+        user.user_loggedin = [NSNumber numberWithInt:(int)0];
+        if (![context save:&error]) {
+            NSLog(@"Error logging out");
+        }
+        else {
+            NSLog(@"Successfully logged out");
+            [self performSegueWithIdentifier:@"logoutSegue" sender:self];
+        }
+    }
+}
+
+
 - (void) alertStatus : (NSString *)msg :(NSString *)title{
     UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:title
                                                         message:msg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -951,7 +986,5 @@
     }
     return nil;
 }
-
-
 
 @end
