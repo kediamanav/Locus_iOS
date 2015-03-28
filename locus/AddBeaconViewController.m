@@ -276,7 +276,7 @@
     
     // Create a new managed object
     NSLog(@"AddNewBeacon");
-    NSLog(@"uuid: %@",self.uuid);
+    NSLog(@"uuid: %@, major: %@, minor: %@",self.uuid, self.major, self.minor);
     
     NSEntityDescription *entityDesc = [NSEntityDescription entityForName:@"Beacon" inManagedObjectContext:context];
     NSFetchRequest *request = [[NSFetchRequest alloc]init];
@@ -293,19 +293,25 @@
         Beacon *beacon = [NSEntityDescription insertNewObjectForEntityForName:@"Beacon" inManagedObjectContext:context];
         beacon.user_name = _user_name;
         beacon.item_name = item_name;
-        beacon.uuid = [self.uuid UUIDString];
-        
+        beacon.uuid = self.uuid;
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
         f.numberStyle = NSNumberFormatterDecimalStyle;
-        beacon.major = [f numberFromString:self.major];
-        beacon.minor = [f numberFromString:self.minor];
+        NSLog(@"Here");
+        //beacon.major = [f numberFromString:self.major];
+        beacon.major = [NSNumber numberWithInt:(int)0];
+        NSLog(@"Problem here");
+        //beacon.minor = [f numberFromString:self.minor];
+        beacon.minor = [NSNumber numberWithInt:(int)0];
+        NSLog(@"Here");
         
         NSString  *temp = [NSString stringWithFormat:@"%@%@%@", @"Your ", item_name,@" is going out of range."];
         beacon.message = temp;
+        NSLog(@"Here");
         beacon.action = [NSNumber numberWithInt:(int)3];
         beacon.event = [NSNumber numberWithInt:(int)3];
         beacon.modified = [NSNumber numberWithInt:(int)1];
-
+        
+        NSLog(@"Here");
         
         NSError *saveError;
         if (![context save:&saveError]) {

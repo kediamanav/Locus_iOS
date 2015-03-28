@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UpdateBeaconViewController.h"
 
 @interface TrackViewController : UIViewController <UITabBarControllerDelegate>
 
 @property (strong, nonatomic) NSString *user_name;
 @property (strong, nonatomic) NSString *item_name;
 @property (strong, nonatomic) IBOutlet UIImage *beaconImage;
+- (IBAction)editPressed:(id)sender;
 
 @end

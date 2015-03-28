@@ -18,9 +18,11 @@
 #import "PendingOperations.h"
 #import "AFNetworking.h"
 #import "TrackViewController.h"
+#import "DeleteItem.h"
+#import "DeleteBeacon.h"
 #import <CoreLocation/CoreLocation.h>
 
-@interface mainTableViewController : UITableViewController <ImageDownloaderDelegate, CLLocationManagerDelegate>
+@interface mainTableViewController : UITableViewController <ImageDownloaderDelegate, CLLocationManagerDelegate, DeleteItemDelegate, DeleteBeaconDelegate>
 - (IBAction) unwindToList:(UIStoryboardSegue *) segue;
 @property NSMutableArray *items;
 @property (nonatomic, strong) NSMutableArray *photos;

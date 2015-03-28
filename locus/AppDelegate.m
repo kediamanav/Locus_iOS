@@ -23,6 +23,11 @@
     return _coreDataHelper.managedObjectContext;
 }
 
+- (PendingUploads *)getPendingOperations{
+    NSLog(@"Get pendingOperations");
+    return _pendingOperations;
+}
+
 - (CoreDataHelper*)cdh {
     if (debug==1) {
         NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));
@@ -53,12 +58,27 @@
     return nil;
 }
 
+
+#pragma mark -Lazy initialization
+
+- (PendingUploads *)pendingOperations {
+    if (!_pendingOperations) {
+        NSLog(@"Pending operation existed");
+        _pendingOperations = [[PendingUploads alloc] init];
+    }
+    NSLog(@"Pending operation did not exist");
+    return _pendingOperations;
+}
+
+
+#pragma mark - Updating modified beacons
+
 -(void) checkForModifiedItems{
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Items"];
     
     // For conditional fetching
-    NSPredicate *filter = [NSPredicate predicateWithFormat:@"item_modified == %d",[[NSNumber numberWithInt:1] intValue]];
+    NSPredicate *filter = [NSPredicate predicateWithFormat:@"(item_modified == %d) OR (item_modified == %d)",[[NSNumber numberWithInt:1] intValue],[[NSNumber numberWithInt:2] intValue]];
     [fetchRequest setPredicate:filter];
     
     NSArray *fetchedObjects = [_coreDataHelper.managedObjectContext executeFetchRequest:fetchRequest error:nil];
@@ -66,8 +86,14 @@
     for(Items *item in fetchedObjects){
         //This function is supposed to handle both add and update
         //Write php part to handle updates, i.e. modify the entire row if the item exists before with the value being changed
-        NSLog(@"Found modified");
-        [self startItemUploading:item];
+        if([item.item_modified intValue]==1){
+            NSLog(@"Found modified");
+            [self startItemUploading:item];
+        }
+        else if([item.item_modified intValue]==2){
+            NSLog(@"Found item to be deleted");
+            //[self deleteItem:item.user_name item:item.item_name];
+        }
     }
 }
 
@@ -84,24 +110,91 @@
     for(Beacon *beacon in fetchedObjects){
         //This function is supposed to handle both add and update
         //Write php part to handle updates, i.e. modify the entire row if the item exists before with the value being changed
-        NSLog(@"Found modified");
         NSLog(@"%@ %@ %@ %ld %ld %ld %ld %@", beacon.user_name,beacon.item_name,beacon.uuid, (long)[beacon.major integerValue],(long)[beacon.minor integerValue],(long)[beacon.event integerValue],(long)[beacon.action integerValue], beacon.message);
-        [self startBeaconUploading:beacon];
+        if([beacon.modified intValue]==1){
+            NSLog(@"Found modified");
+            [self startBeaconUploading:beacon];
+        }
+        else if([beacon.modified intValue]==2){
+            NSLog(@"Found beacon to be deleted");
+            //[self deleteBeacon:beacon.user_name item:beacon.item_name];
+        }
+        
     }
 }
 
 
-#pragma mark -Lazy initialization
-
-- (PendingUploads *)pendingOperations {
-    if (!_pendingOperations) {
-        NSLog(@"Pending operation existed");
-        _pendingOperations = [[PendingUploads alloc] init];
-    }
-    NSLog(@"Pending operation did not exist");
-    return _pendingOperations;
+/*
+#pragma mark - Delete item
+- (void)deleteItem:(NSString *)user_name item:(NSString *)item_name{
+    DeleteItem *itemDeleter = [[DeleteItem alloc] initWithNames:user_name item:item_name delegate:self];
+    [self.pendingOperations.uploadQueue addOperation:itemDeleter];
 }
 
+
+- (void) didFinishItemDelete:(DeleteItem *)uploader{
+    NSString *item_name = uploader.item_name;
+    NSString *user_name = uploader.user_name;
+    BOOL success = uploader.success;
+    
+    //Update here that the item is no longer modified
+    if(success==true){
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Items"];
+        
+        // For conditional fetching
+        NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",user_name,item_name];
+        [request setPredicate:filter];
+        
+        NSError *error = nil;
+        Items *item = [[_coreDataHelper.managedObjectContext executeFetchRequest:request error:&error] lastObject];
+        
+        if(error){
+            NSLog(@"Deleting item from local database failed! %@ %@", error, [error localizedDescription]);
+        }
+        if(item){
+            [_coreDataHelper.managedObjectContext deleteObject:item];
+            [_coreDataHelper saveContext];
+        }
+    }
+}
+
+
+#pragma mark - Delete beacon
+- (void)deleteBeacon:(NSString *)user_name item:(NSString *)item_name{
+    DeleteBeacon *beaconDeleter = [[DeleteBeacon alloc] initWithNames:user_name item:item_name delegate:self];
+    [self.pendingOperations.uploadQueue addOperation:beaconDeleter];
+}
+
+
+- (void) didFinishBeaconDelete:(DeleteBeacon *)uploader{
+    NSString *item_name = uploader.item_name;
+    NSString *user_name = uploader.user_name;
+    BOOL success = uploader.success;
+    
+    //Update here that the item is no longer modified
+    if(success==true){
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Beacon"];
+        
+        // For conditional fetching
+        NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",user_name,item_name];
+        [request setPredicate:filter];
+        
+        NSError *error = nil;
+        Items *item = [[_coreDataHelper.managedObjectContext executeFetchRequest:request error:&error] lastObject];
+        
+        if(error){
+            NSLog(@"Deleting beacon from local database failed! %@ %@", error, [error localizedDescription]);
+        }
+        if(item){
+            [_coreDataHelper.managedObjectContext deleteObject:item];
+            [_coreDataHelper saveContext];
+        }
+    }
+}
+*/
+
+
+#pragma mark - Upload item
 - (void)startItemUploading:(Items *)item {
     ItemUploader *itemUploader = [[ItemUploader alloc] initWithItems:item delegate:self];
     [self.pendingOperations.uploadQueue addOperation:itemUploader];
@@ -135,6 +228,7 @@
     }
 }
 
+#pragma mark - Upload beacon
 - (void)startBeaconUploading:(Beacon *)beacon {
     BeaconUploader *beaconUploader = [[BeaconUploader alloc] initWithItems:beacon delegate:self];
     [self.pendingOperations.uploadQueue addOperation:beaconUploader];
@@ -167,7 +261,6 @@
         }
     }
 }
-
 
 
 #pragma mark - Other functions

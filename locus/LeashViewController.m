@@ -14,6 +14,7 @@
 
 @interface LeashViewController ()
 @property BeaconDatabase *beaconData;
+- (IBAction)editPressed:(id)sender;
 @property Beacon *beacon;
 @end
 
@@ -65,6 +66,18 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue  sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    NSLog(@"Switching to edit view");
+    if([[segue identifier] isEqualToString:@"ShowEditView"]){
+        NSLog(@"Prepare for segue: %@", segue.destinationViewController);
+        UINavigationController *segueNavigation = [segue destinationViewController];
+        NSLog(@"Prepare for segue: %@", segue.identifier);
+        UpdateBeaconViewController *transferViewController = (UpdateBeaconViewController *)[[segueNavigation viewControllers] objectAtIndex:0];
+        NSLog(@"Prepare for segue: %@", segue.identifier);
+        transferViewController.user_name = self.user_name;
+        transferViewController.item_name = self.item_name;
+        transferViewController.beaconImage = self.beaconImage;
+        NSLog(@"%@", transferViewController.user_name);
+    }
 }
 
 - (IBAction)savePressed:(id)sender {
@@ -148,4 +161,7 @@
     self.actionType.text = actionVC.chosenAction;
 }
 
+- (IBAction)editPressed:(id)sender {
+    [self performSegueWithIdentifier:@"ShowEditView" sender:self];
+}
 @end

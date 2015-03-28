@@ -44,6 +44,15 @@
     return context;
 }
 
+/* To recover the managed context object from the app delegate*/
+- (PendingUploads *)getPendingUploads{
+    PendingUploads *uploads = nil;
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    uploads = delegate.pendingOperations;
+    return uploads;
+}
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -718,6 +727,84 @@
     [self performSegueWithIdentifier:@"BeaconDetailSegue" sender:self];
 }
 
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //add code here for when you hit delete
+        NSLog(@"Delete swipe appears");
+        BeaconTableViewCell *curItem = (BeaconTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+        NSString *item_name = curItem.nameLabel.text;
+        NSLog(@"Deleting %@, %@",user_name,item_name);
+        
+        //Deleting Item
+        NSManagedObjectContext *context = [self managedObjectContext];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Items"];
+        NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",user_name,item_name];
+        [request setPredicate:filter];
+        
+        NSError *error = nil;
+        Items *item = nil;
+        item = [[context executeFetchRequest:request error:&error] lastObject];
+        
+        if(error){
+            NSLog(@"Can't execute fetch request! %@ %@", error, [error localizedDescription]);
+        }
+        if(item){
+            [context deleteObject:item];
+            //item.item_modified = [NSNumber numberWithInt:2];
+            error = nil;
+            if (![context save:&error]) {
+                NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+            }
+        }
+        
+        //Now deleting beacon
+        NSFetchRequest *request1 = [NSFetchRequest fetchRequestWithEntityName:@"Beacon"];
+        NSPredicate *filter1 = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",user_name,item_name];
+        [request1 setPredicate:filter1];
+        
+        Beacon *beacon = nil;
+        beacon = [[context executeFetchRequest:request1 error:&error] lastObject];
+        
+        if(error){
+            NSLog(@"Can't execute fetch request! %@ %@", error, [error localizedDescription]);
+        }
+        if(beacon){
+            [context deleteObject:beacon];
+            error = nil;
+            if (![context save:&error]) {
+                NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+            }
+        }
+        [self loadTableData];
+    }
+}
+
+
+#pragma mark - Delete item
+- (void)deleteItem:(NSString *)user_name item:(NSString *)item_name{
+    DeleteItem *itemDeleter = [[DeleteItem alloc] initWithNames:self.user_name item:item_name delegate:self];
+    PendingUploads *pendings = [self getPendingUploads];
+    [pendings.uploadQueue addOperation:itemDeleter];
+}
+
+
+- (void) didFinishItemDelete:(DeleteItem *)uploader{
+}
+
+
+#pragma mark - Delete beacon
+- (void)deleteBeacon:(NSString *)user_name item:(NSString *)item_name{
+    DeleteBeacon *beaconDeleter = [[DeleteBeacon alloc] initWithNames:self.user_name item:item_name delegate:self];
+    PendingUploads *pendings = [self getPendingUploads];
+    [pendings.uploadQueue addOperation:beaconDeleter];
+}
+
+
+- (void) didFinishBeaconDelete:(DeleteBeacon *)uploader{
+}
+
+
 - (void)startOperationsForPhotoRecord:(PhotoRecord *)record atIndexPath:(NSIndexPath *)indexPath {
     
     if (!record.hasImage) {
@@ -889,7 +976,6 @@
                 }
             }
         }
-        
     }
     else {
         NSLog(@"No beacon found!");
@@ -939,6 +1025,13 @@
 //Perform actions for Regions event Enter and Exit
 - (void)performActionForEvent:(NSNumber *)event withIdentifier:(NSString *)identifier
 {
+    NSLog(@"Playing Alarm");
+    if (isAppInBackground) {
+        [self showBackgroundAlert:@"Playing Alarm"];
+    }
+    [self playAlarm];
+    return;
+    /*
     NSString *regionUUIDFromIdentifier = [self getRegionUUIDFromIdentifier:identifier];
     NSLog(@"Performing action for event: %@ RegionUUID %@",event,regionUUIDFromIdentifier);
     for(int index = 0; index < [self.beacons count]; index ++)
@@ -975,7 +1068,7 @@
                 }
             }
         }
-    }
+    }*/
 }
 
 - (NSString *) getRegionUUIDFromIdentifier:(NSString *)regionIdentifier

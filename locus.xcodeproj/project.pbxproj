@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		500541121AC6735D00761C22 /* DeleteItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 500541111AC6735D00761C22 /* DeleteItem.m */; };
 		5008034B1A7665DA00F96E5D /* LeashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008034A1A7665DA00F96E5D /* LeashViewController.m */; };
 		5008034E1A766C5E00F96E5D /* EventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5008034D1A766C5E00F96E5D /* EventTableViewController.m */; };
 		500803511A766C6D00F96E5D /* ActionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 500803501A766C6D00F96E5D /* ActionTableViewController.m */; };
@@ -27,6 +28,8 @@
 		500DE87D1A758C0F0095BD9C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 500DE87C1A758C0F0095BD9C /* MapKit.framework */; };
 		500DE87F1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE87E1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png */; };
 		5011E8211A7939F900716065 /* Beacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5011E8201A7939F900716065 /* Beacon.m */; };
+		50130AF61AC6DF1F002BB6BC /* DeleteBeacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 50130AF51AC6DF1F002BB6BC /* DeleteBeacon.m */; };
+		50130AF91AC6E76F002BB6BC /* UpdateBeaconViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50130AF81AC6E76F002BB6BC /* UpdateBeaconViewController.m */; };
 		5014E9B71A77AE0B003F4ACC /* Alarm.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B11A77AE0B003F4ACC /* Alarm.png */; };
 		5014E9B81A77AE0B003F4ACC /* ImmediateRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */; };
 		5014E9B91A77AE0B003F4ACC /* InRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B31A77AE0B003F4ACC /* InRange.png */; };
@@ -116,6 +119,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		500541101AC6735D00761C22 /* DeleteItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeleteItem.h; sourceTree = "<group>"; };
+		500541111AC6735D00761C22 /* DeleteItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeleteItem.m; sourceTree = "<group>"; };
 		500803491A7665D900F96E5D /* LeashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeashViewController.h; sourceTree = "<group>"; };
 		5008034A1A7665DA00F96E5D /* LeashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeashViewController.m; sourceTree = "<group>"; };
 		5008034C1A766C5E00F96E5D /* EventTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableViewController.h; sourceTree = "<group>"; };
@@ -146,6 +151,10 @@
 		500DE87E1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "yellow-exclamation-mark-in-triangle-hi.png"; path = "../../../../../../Downloads/yellow-exclamation-mark-in-triangle-hi.png"; sourceTree = "<group>"; };
 		5011E81F1A7939F900716065 /* Beacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Beacon.h; sourceTree = "<group>"; };
 		5011E8201A7939F900716065 /* Beacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Beacon.m; sourceTree = "<group>"; };
+		50130AF41AC6DF1F002BB6BC /* DeleteBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeleteBeacon.h; sourceTree = "<group>"; };
+		50130AF51AC6DF1F002BB6BC /* DeleteBeacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeleteBeacon.m; sourceTree = "<group>"; };
+		50130AF71AC6E76F002BB6BC /* UpdateBeaconViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateBeaconViewController.h; sourceTree = "<group>"; };
+		50130AF81AC6E76F002BB6BC /* UpdateBeaconViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateBeaconViewController.m; sourceTree = "<group>"; };
 		5014E9B11A77AE0B003F4ACC /* Alarm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Alarm.png; sourceTree = "<group>"; };
 		5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImmediateRange.png; sourceTree = "<group>"; };
 		5014E9B31A77AE0B003F4ACC /* InRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InRange.png; sourceTree = "<group>"; };
@@ -322,6 +331,8 @@
 				50201D0F1A7131CF00C4442A /* CoreDataHelper.m */,
 				50201D391A7131D900C4442A /* AddBeaconViewController.h */,
 				50201D3A1A7131D900C4442A /* AddBeaconViewController.m */,
+				50130AF71AC6E76F002BB6BC /* UpdateBeaconViewController.h */,
+				50130AF81AC6E76F002BB6BC /* UpdateBeaconViewController.m */,
 				50201D3F1A7133E400C4442A /* LoginViewController.h */,
 				50201D401A7133E400C4442A /* LoginViewController.m */,
 				50201D411A7133E400C4442A /* mainTableViewController.h */,
@@ -407,6 +418,10 @@
 				50201D161A7131CF00C4442A /* ItemUploader.m */,
 				50201D1B1A7131CF00C4442A /* PendingUploads.h */,
 				50201D1C1A7131CF00C4442A /* PendingUploads.m */,
+				500541101AC6735D00761C22 /* DeleteItem.h */,
+				500541111AC6735D00761C22 /* DeleteItem.m */,
+				50130AF41AC6DF1F002BB6BC /* DeleteBeacon.h */,
+				50130AF51AC6DF1F002BB6BC /* DeleteBeacon.m */,
 			);
 			name = "Upload Items";
 			sourceTree = "<group>";
@@ -693,8 +708,10 @@
 				50201D3B1A7131D900C4442A /* AddBeaconViewController.m in Sources */,
 				5008E92D1A7809AD00189481 /* BeaconDatabase.m in Sources */,
 				50201D661A71349700C4442A /* SBJsonStreamParserAdapter.m in Sources */,
+				50130AF91AC6E76F002BB6BC /* UpdateBeaconViewController.m in Sources */,
 				50201D2D1A7131CF00C4442A /* ImageDownloader.m in Sources */,
 				5020190E1A712D9100C4442A /* AppDelegate.m in Sources */,
+				50130AF61AC6DF1F002BB6BC /* DeleteBeacon.m in Sources */,
 				50201D651A71349700C4442A /* SBJsonStreamParserAccumulator.m in Sources */,
 				50201D911A71399E00C4442A /* Model.xcdatamodeld in Sources */,
 				500803511A766C6D00F96E5D /* ActionTableViewController.m in Sources */,
@@ -720,6 +737,7 @@
 				50201D321A7131CF00C4442A /* PendingOperations.m in Sources */,
 				50201D831A71357200C4442A /* AFHTTPRequestOperationManager.m in Sources */,
 				50201D291A7131CF00C4442A /* beaconClass.m in Sources */,
+				500541121AC6735D00761C22 /* DeleteItem.m in Sources */,
 				50A8A91E1A7E67440078BB8C /* BeaconUploader.m in Sources */,
 				50201D891A71357200C4442A /* AFURLResponseSerialization.m in Sources */,
 				50201D381A7131CF00C4442A /* Users.m in Sources */,
