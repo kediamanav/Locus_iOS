@@ -295,14 +295,18 @@
         beacon.user_name = _user_name;
         beacon.item_name = item_name;
         beacon.uuid = self.uuid;
+        
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
         f.numberStyle = NSNumberFormatterDecimalStyle;
         NSLog(@"Here");
         //beacon.major = [f numberFromString:self.major];
-        beacon.major = [NSNumber numberWithInt:(int)0];
+        //beacon.major = [NSNumber numberWithInt:(int)0];
+        beacon.major = [NSNumber numberWithInt:[self.major intValue]];
         NSLog(@"Problem here");
+        
         //beacon.minor = [f numberFromString:self.minor];
-        beacon.minor = [NSNumber numberWithInt:(int)0];
+        //beacon.minor = [NSNumber numberWithInt:(int)0];
+        beacon.minor = [NSNumber numberWithInt:[self.minor intValue]];
         NSLog(@"Here");
         
         NSString  *temp = [NSString stringWithFormat:@"%@%@%@", @"Your ", item_name,@" is going out of range."];
