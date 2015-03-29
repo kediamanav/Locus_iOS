@@ -1,9 +1,9 @@
 //
 //  Items.m
-//  sticky
+//  locus
 //
-//  Created by Manav Kedia on 15/12/14.
-//  Copyright (c) 2014 Manav Kedia. All rights reserved.
+//  Created by Manav Kedia on 28/03/15.
+//  Copyright (c) 2015 Manav Kedia. All rights reserved.
 //
 
 #import "Items.h"
@@ -20,9 +20,10 @@
 @dynamic item_isLost;
 @dynamic item_lastTracked;
 @dynamic item_macAddress;
+@dynamic item_modified;
 @dynamic item_name;
 @dynamic item_picture;
 @dynamic user_name;
-@dynamic item_modified;
+@dynamic item_new_name;
 
 @end

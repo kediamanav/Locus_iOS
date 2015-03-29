@@ -224,7 +224,7 @@
 
 /* Create alert if some required field something is missing*/
 - (void) alertStatus : (NSString *)msg :(NSString *)title{
-    UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"No" otherButtonTitles:nil, nil];
     [alertview show];
 }
 
@@ -247,6 +247,7 @@
     newItem.item_DOB = dateTimeStamp;
     newItem.item_lastTracked = dateTimeStamp;
     newItem.item_modified = [NSNumber numberWithInt:(int)1];
+    newItem.item_new_name = @"";
     
     if(self.picTaken == 1){
         NSData *imageData = UIImageJPEGRepresentation(self.pictureBeacon.image, 90);
@@ -310,6 +311,7 @@
         beacon.action = [NSNumber numberWithInt:(int)3];
         beacon.event = [NSNumber numberWithInt:(int)3];
         beacon.modified = [NSNumber numberWithInt:(int)1];
+        beacon.item_new_name = @"";
         
         NSLog(@"Here");
         

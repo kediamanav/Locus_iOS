@@ -23,11 +23,6 @@
     return _coreDataHelper.managedObjectContext;
 }
 
-- (PendingUploads *)getPendingOperations{
-    NSLog(@"Get pendingOperations");
-    return _pendingOperations;
-}
-
 - (CoreDataHelper*)cdh {
     if (debug==1) {
         NSLog(@"Running %@ '%@'", self.class, NSStringFromSelector(_cmd));
@@ -119,7 +114,6 @@
             NSLog(@"Found beacon to be deleted");
             //[self deleteBeacon:beacon.user_name item:beacon.item_name];
         }
-        
     }
 }
 
@@ -197,7 +191,9 @@
 #pragma mark - Upload item
 - (void)startItemUploading:(Items *)item {
     ItemUploader *itemUploader = [[ItemUploader alloc] initWithItems:item delegate:self];
+    NSLog(@"INSIDE startItemUploading");
     [self.pendingOperations.uploadQueue addOperation:itemUploader];
+    NSLog(@"INSIDE startItemUploading1");
 }
 
 - (void)itemUploadDidFinish:(ItemUploader *)uploader {
@@ -223,6 +219,10 @@
         }
         if(item){
             item.item_modified = [NSNumber numberWithInt:(int)0];
+            if(![item.item_new_name isEqualToString:@""]){
+                item.item_name = item.item_new_name;
+                item.item_new_name = @"";
+            }
             [_coreDataHelper saveContext];
         }
     }
@@ -257,6 +257,11 @@
         }
         if(beacon){
             beacon.modified = [NSNumber numberWithInt:(int)0];
+            if(![beacon.item_new_name isEqualToString:@""]){
+                beacon.item_name = beacon.item_new_name;
+                beacon.item_new_name = @"";
+            }
+                
             [_coreDataHelper saveContext];
         }
     }

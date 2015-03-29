@@ -46,11 +46,11 @@
 -(void)main{
     @autoreleasepool {
         
-            NSLog(@"Inside the threaded function");
+            NSLog(@"Inside the threaded function for items");
         
             //Creating the key-value pair arrays to hold the post data
-            NSArray *keys = [[NSArray alloc] initWithObjects:@"user_name",@"item_name",@"item_DOB",@"item_lastTracked",@"item_description",@"item_eLeashRange",@"item_isLost",@"item_eLeashOn",@"item_macAddress", nil];
-            NSArray *vals = [[NSArray alloc] initWithObjects:_item.user_name,_item.item_name, _item.item_DOB, _item.item_lastTracked, _item.item_description, _item.item_eLeashRange, _item.item_isLost, _item.item_eLeashOn , _item.item_macAddress, nil];
+            NSArray *keys = [[NSArray alloc] initWithObjects:@"user_name",@"item_name",@"item_DOB",@"item_lastTracked",@"item_description",@"item_eLeashRange",@"item_isLost",@"item_eLeashOn",@"item_macAddress",@"item_new_name" ,nil];
+            NSArray *vals = [[NSArray alloc] initWithObjects:_item.user_name,_item.item_name, _item.item_DOB, _item.item_lastTracked, _item.item_description, _item.item_eLeashRange, _item.item_isLost, _item.item_eLeashOn , _item.item_macAddress,_item.item_new_name ,nil];
             
             // NSString *post =[[NSString alloc] initWithFormat:@"user_name=%@&item_name=%@&item_DOB=%@&item_lastTracked=%@&item_description=%@&item_eLeashRange=%ld&item_isLost=%ld&item_eLeashOn=%ld&item_macAddress=%@",_user_name,item_name, dateTimeStamp, dateTimeStamp, item_description, (long)range, (long)isLost, (long)eLeashOn, _macAddress];
             //NSLog(@"PostData: %@",post);
@@ -117,12 +117,12 @@
                     NSLog(@"%ld",(long)success);
                     if(success == 1)
                     {
-                        NSLog(@"Beacon successfully added to global database");
+                        NSLog(@"Item successfully added to global database");
                         self.success = true;
                     }
                     else{
                         NSString *error_msg = (NSString *) [jsonData objectForKey:@"error_message"];
-                        NSLog(@"Beacon could not be added to global database: %@",error_msg);
+                        NSLog(@"Item could not be added to global database: %@",error_msg);
                     }
                     
                     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -136,7 +136,7 @@
                 
             }
             @catch (NSException * e) {
-                NSLog(@"Beacon could not be added. Exception: %@", e);
+                NSLog(@"Item could not be added. Exception: %@", e);
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             }
                 

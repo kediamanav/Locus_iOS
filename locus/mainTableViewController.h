@@ -29,6 +29,7 @@
 @property (nonatomic, strong) NSString *user_name;
 @property NSInteger loadFromLocal;
 @property (nonatomic, strong) PendingOperations *pendingOperations;
+@property (nonatomic, strong) PendingUploads *pendingUploads;
 @property(strong, nonatomic) CLLocationManager *locationManager;
 
 @end

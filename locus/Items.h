@@ -1,9 +1,9 @@
 //
 //  Items.h
-//  sticky
+//  locus
 //
-//  Created by Manav Kedia on 15/12/14.
-//  Copyright (c) 2014 Manav Kedia. All rights reserved.
+//  Created by Manav Kedia on 28/03/15.
+//  Copyright (c) 2015 Manav Kedia. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -21,9 +21,10 @@
 @property (nonatomic, retain) NSNumber * item_isLost;
 @property (nonatomic, retain) NSString * item_lastTracked;
 @property (nonatomic, retain) NSString * item_macAddress;
+@property (nonatomic, retain) NSNumber * item_modified;
 @property (nonatomic, retain) NSString * item_name;
 @property (nonatomic, retain) NSData * item_picture;
 @property (nonatomic, retain) NSString * user_name;
-@property (nonatomic, retain) NSNumber * item_modified;
+@property (nonatomic, retain) NSString * item_new_name;
 
 @end

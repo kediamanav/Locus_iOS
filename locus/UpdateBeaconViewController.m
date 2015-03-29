@@ -218,13 +218,15 @@
     //Updating Item
     NSManagedObjectContext *context = [self managedObjectContext];
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Items"];
-    NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",_user_name,item_name];
+    NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",_user_name,self.item_name];
     [request setPredicate:filter];
     
     //Updating Beacon
     NSFetchRequest *request1 = [NSFetchRequest fetchRequestWithEntityName:@"Beacon"];
-    NSPredicate *filter1 = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",_user_name,item_name];
+    NSPredicate *filter1 = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",_user_name,self.item_name];
     [request1 setPredicate:filter1];
+    
+    NSLog(@"Removing item: %@, from user %@",self.item_name,self.user_name);
     
     NSError *error = nil;
     NSError *error1 = nil;
@@ -237,13 +239,13 @@
         NSLog(@"Can't execute fetch request! %@ %@", error, [error localizedDescription]);
     }
     if(item && beacon){
-        item.item_name = item_name;
+        item.item_new_name = item_name;
         item.item_description = item_description;
         item.item_lastTracked = dateTimeStamp;
         item.item_modified = [NSNumber numberWithInt:1];
         
         beacon.modified = [NSNumber numberWithInt:1];
-        beacon.item_name = item_name;
+        beacon.item_new_name = item_name;
         
         if(self.picTaken == 1){
             NSData *imageData = UIImageJPEGRepresentation(self.itemImage.image, 90);

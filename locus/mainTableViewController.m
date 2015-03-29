@@ -27,6 +27,7 @@
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 @property (strong, nonatomic) NSMutableArray *regions;
 @property (strong, nonatomic) NSMutableArray *beaconsRange;
+@property (strong, nonatomic) NSIndexPath *deleteIndexPath;
 @end
 
 @implementation mainTableViewController
@@ -402,6 +403,7 @@
                 newItem.item_eLeashOn = [NSNumber numberWithInt:(int)[[item objectForKey:@"item_eLeashOn"] integerValue]];
                 newItem.item_DOB = [item objectForKey:@"item_DOB"];
                 newItem.item_lastTracked = [item objectForKey:@"item_lastTracked"];
+                newItem.item_new_name = @"";
                 
                 //Now save the context
                 NSError *error = nil;
@@ -490,6 +492,7 @@
                 newBeacon.action = [NSNumber numberWithInt:(int)[[beacon objectForKey:@"action"] integerValue]];
                 newBeacon.message = [beacon objectForKey:@"message"];
                 newBeacon.modified = [NSNumber numberWithInt:0];
+                newBeacon.item_new_name = @"";
                 
                 //Now save the context
                 NSError *error = nil;
@@ -727,12 +730,28 @@
     [self performSegueWithIdentifier:@"BeaconDetailSegue" sender:self];
 }
 
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        //add code here for when you hit delete
-        NSLog(@"Delete swipe appears");
-        BeaconTableViewCell *curItem = (BeaconTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+
+- (IBAction)deleteConfirmation {
+    
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@"Warning" message:@"Are you sure you want to delete this beacon?"
+                          delegate:self
+                          cancelButtonTitle:@"No"
+                          otherButtonTitles:@"Yes", nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    // My OK button
+    
+    if (buttonIndex == alertView.cancelButtonIndex) {
+        [self viewDidLoad];
+        
+    } else if (buttonIndex == alertView.firstOtherButtonIndex) {
+        NSLog(@"Delete confirmed");
+        
+        BeaconTableViewCell *curItem = (BeaconTableViewCell *)[self.tableView cellForRowAtIndexPath:_deleteIndexPath];
         NSString *item_name = curItem.nameLabel.text;
         NSLog(@"Deleting %@, %@",user_name,item_name);
         
@@ -750,8 +769,10 @@
             NSLog(@"Can't execute fetch request! %@ %@", error, [error localizedDescription]);
         }
         if(item){
+            [self deleteItem:item.item_name];
             [context deleteObject:item];
             //item.item_modified = [NSNumber numberWithInt:2];
+            NSLog(@"Item deleted from local database");
             error = nil;
             if (![context save:&error]) {
                 NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
@@ -770,7 +791,9 @@
             NSLog(@"Can't execute fetch request! %@ %@", error, [error localizedDescription]);
         }
         if(beacon){
+            [self deleteBeacon:beacon.item_name];
             [context deleteObject:beacon];
+            NSLog(@"Beacon deleted from local database");
             error = nil;
             if (![context save:&error]) {
                 NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
@@ -778,14 +801,29 @@
         }
         [self loadTableData];
     }
+    
+}
+
+
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //add code here for when you hit delete
+        NSLog(@"Delete swipe appears");
+        self.deleteIndexPath = indexPath;
+        [self deleteConfirmation];
+        
+    }
 }
 
 
 #pragma mark - Delete item
-- (void)deleteItem:(NSString *)user_name item:(NSString *)item_name{
+- (void)deleteItem:(NSString *)item_name{
+    NSLog(@"For deleting item Inside deleteItem function: %@, %@",self.user_name,item_name);
     DeleteItem *itemDeleter = [[DeleteItem alloc] initWithNames:self.user_name item:item_name delegate:self];
     PendingUploads *pendings = [self getPendingUploads];
     [pendings.uploadQueue addOperation:itemDeleter];
+    NSLog(@"Delete item initiated");
 }
 
 
@@ -794,10 +832,13 @@
 
 
 #pragma mark - Delete beacon
-- (void)deleteBeacon:(NSString *)user_name item:(NSString *)item_name{
+- (void)deleteBeacon:(NSString *)item_name{
+    NSLog(@"For deleting beacon Inside deleteBeacon function: %@, %@",self.user_name,item_name);
     DeleteBeacon *beaconDeleter = [[DeleteBeacon alloc] initWithNames:self.user_name item:item_name delegate:self];
     PendingUploads *pendings = [self getPendingUploads];
     [pendings.uploadQueue addOperation:beaconDeleter];
+    NSLog(@"Delete beacon initiated");
+
 }
 
 

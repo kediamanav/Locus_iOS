@@ -41,8 +41,9 @@
         
         NSLog(@"Inside the threaded function");
         
+        NSLog(@"Inside deleteItem.m, %@, %@",self.user_name,self.item_name);
         //Creating the key-value pair arrays to hold the post data
-        NSArray *keys = [[NSArray alloc] initWithObjects:@"user_name", nil];
+        NSArray *keys = [[NSArray alloc] initWithObjects:@"user_name",@"item_name", nil];
         NSArray *vals = [[NSArray alloc] initWithObjects:self.user_name,self.item_name, nil];
         
         NSURL *url=[NSURL URLWithString:@"http://locus-trak.rhcloud.com/login/deleteUserBeacon"];
@@ -111,7 +112,7 @@
         }
         
         
-        [(NSObject *)self.delegate performSelectorOnMainThread:@selector(itemUploadDidFinish:) withObject:self waitUntilDone:NO];
+        [(NSObject *)self.delegate performSelectorOnMainThread:@selector(didFinishBeaconDelete:) withObject:self waitUntilDone:NO];
     }
 }
 

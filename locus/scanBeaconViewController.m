@@ -219,11 +219,12 @@ BOOL isAppInBackground;
         for(int i = 0; i < [beacons count]; i++) //scanned beacons in Ranging
         {
             
-            NSLog(@"Beacon UUID: %@",[[beacons[i] proximityUUID] UUIDString]);
-            NSLog(@"Beacon Major: %@",[beacons[i] major]);
-            NSLog(@"Beacon Minor: %@",[beacons[i] minor]);
+            //NSLog(@"Beacon UUID: %@",[[beacons[i] proximityUUID] UUIDString]);
+            //NSLog(@"Beacon Major: %@",[beacons[i] major]);
+            //NSLog(@"Beacon Minor: %@",[beacons[i] minor]);
             
             if([beacons[i] proximity] != CLProximityUnknown){
+                NSLog(@"Beacon found in range");
                 [self.beaconTable reloadData];
                 //Add to the data to be displayed in the tables
                 
@@ -236,8 +237,11 @@ BOOL isAppInBackground;
                 [request setPredicate:predSearch];
                 NSError *error;
                 NSArray *matchingRecords = [_context executeFetchRequest:request error:&error];
+                NSLog(@"%d",matchingRecords.count);
                 if (matchingRecords.count==0) {
+                    NSLog(@"No matching records found");
                     if (!([self.uuid containsObject:[[beacons[i] proximityUUID] UUIDString]] && [self.major containsObject:[beacons[i] major]] && [self.minor containsObject:[beacons[i] minor]])){
+                        NSLog(@"The beacon is not already displayed");
                         [self.uuid addObject:[[beacons[i] proximityUUID] UUIDString]];
                         [self.major addObject:[beacons[i] major]];
                         [self.minor addObject:[beacons[i] minor]];

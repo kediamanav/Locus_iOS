@@ -69,6 +69,7 @@
             Beacon *existingBeacon = [matchingRecords lastObject];
             [existingBeacon setValue:beacon.user_name forKey:@"user_name"];
             [existingBeacon setValue:beacon.item_name forKey:@"item_name"];
+            [existingBeacon setValue:beacon.item_new_name forKey:@"item_new_name"];
             [existingBeacon setValue:beacon.uuid forKey:@"uuid"];
             [existingBeacon setValue:beacon.major forKey:@"major"];
             [existingBeacon setValue:beacon.minor forKey:@"minor"];

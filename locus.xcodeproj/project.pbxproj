@@ -27,9 +27,10 @@
 		500DE87B1A758AA20095BD9C /* camera-iphone-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE8791A758AA20095BD9C /* camera-iphone-icon.png */; };
 		500DE87D1A758C0F0095BD9C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 500DE87C1A758C0F0095BD9C /* MapKit.framework */; };
 		500DE87F1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 500DE87E1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png */; };
-		5011E8211A7939F900716065 /* Beacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 5011E8201A7939F900716065 /* Beacon.m */; };
 		50130AF61AC6DF1F002BB6BC /* DeleteBeacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 50130AF51AC6DF1F002BB6BC /* DeleteBeacon.m */; };
 		50130AF91AC6E76F002BB6BC /* UpdateBeaconViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50130AF81AC6E76F002BB6BC /* UpdateBeaconViewController.m */; };
+		50130AFF1AC72067002BB6BC /* Items.m in Sources */ = {isa = PBXBuildFile; fileRef = 50130AFE1AC72067002BB6BC /* Items.m */; };
+		50130B021AC7208B002BB6BC /* Beacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 50130B011AC7208B002BB6BC /* Beacon.m */; };
 		5014E9B71A77AE0B003F4ACC /* Alarm.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B11A77AE0B003F4ACC /* Alarm.png */; };
 		5014E9B81A77AE0B003F4ACC /* ImmediateRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */; };
 		5014E9B91A77AE0B003F4ACC /* InRange.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014E9B31A77AE0B003F4ACC /* InRange.png */; };
@@ -48,7 +49,6 @@
 		50201D2B1A7131CF00C4442A /* BeaconTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 50201D0D1A7131CF00C4442A /* BeaconTableViewCell.m */; };
 		50201D2C1A7131CF00C4442A /* CoreDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 50201D0F1A7131CF00C4442A /* CoreDataHelper.m */; };
 		50201D2D1A7131CF00C4442A /* ImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 50201D111A7131CF00C4442A /* ImageDownloader.m */; };
-		50201D2F1A7131CF00C4442A /* Items.m in Sources */ = {isa = PBXBuildFile; fileRef = 50201D141A7131CF00C4442A /* Items.m */; };
 		50201D301A7131CF00C4442A /* ItemUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 50201D161A7131CF00C4442A /* ItemUploader.m */; };
 		50201D321A7131CF00C4442A /* PendingOperations.m in Sources */ = {isa = PBXBuildFile; fileRef = 50201D1A1A7131CF00C4442A /* PendingOperations.m */; };
 		50201D331A7131CF00C4442A /* PendingUploads.m in Sources */ = {isa = PBXBuildFile; fileRef = 50201D1C1A7131CF00C4442A /* PendingUploads.m */; };
@@ -149,12 +149,14 @@
 		500DE8791A758AA20095BD9C /* camera-iphone-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "camera-iphone-icon.png"; path = "../../../../../../Downloads/camera-iphone-icon.png"; sourceTree = "<group>"; };
 		500DE87C1A758C0F0095BD9C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		500DE87E1A75920D0095BD9C /* yellow-exclamation-mark-in-triangle-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "yellow-exclamation-mark-in-triangle-hi.png"; path = "../../../../../../Downloads/yellow-exclamation-mark-in-triangle-hi.png"; sourceTree = "<group>"; };
-		5011E81F1A7939F900716065 /* Beacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Beacon.h; sourceTree = "<group>"; };
-		5011E8201A7939F900716065 /* Beacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Beacon.m; sourceTree = "<group>"; };
 		50130AF41AC6DF1F002BB6BC /* DeleteBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeleteBeacon.h; sourceTree = "<group>"; };
 		50130AF51AC6DF1F002BB6BC /* DeleteBeacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeleteBeacon.m; sourceTree = "<group>"; };
 		50130AF71AC6E76F002BB6BC /* UpdateBeaconViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateBeaconViewController.h; sourceTree = "<group>"; };
 		50130AF81AC6E76F002BB6BC /* UpdateBeaconViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateBeaconViewController.m; sourceTree = "<group>"; };
+		50130AFD1AC72067002BB6BC /* Items.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Items.h; sourceTree = "<group>"; };
+		50130AFE1AC72067002BB6BC /* Items.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Items.m; sourceTree = "<group>"; };
+		50130B001AC7208B002BB6BC /* Beacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Beacon.h; sourceTree = "<group>"; };
+		50130B011AC7208B002BB6BC /* Beacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Beacon.m; sourceTree = "<group>"; };
 		5014E9B11A77AE0B003F4ACC /* Alarm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Alarm.png; sourceTree = "<group>"; };
 		5014E9B21A77AE0B003F4ACC /* ImmediateRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImmediateRange.png; sourceTree = "<group>"; };
 		5014E9B31A77AE0B003F4ACC /* InRange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InRange.png; sourceTree = "<group>"; };
@@ -182,8 +184,6 @@
 		50201D0F1A7131CF00C4442A /* CoreDataHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataHelper.m; sourceTree = "<group>"; };
 		50201D101A7131CF00C4442A /* ImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDownloader.h; sourceTree = "<group>"; };
 		50201D111A7131CF00C4442A /* ImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDownloader.m; sourceTree = "<group>"; };
-		50201D131A7131CF00C4442A /* Items.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Items.h; sourceTree = "<group>"; };
-		50201D141A7131CF00C4442A /* Items.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Items.m; sourceTree = "<group>"; };
 		50201D151A7131CF00C4442A /* ItemUploader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemUploader.h; sourceTree = "<group>"; };
 		50201D161A7131CF00C4442A /* ItemUploader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemUploader.m; sourceTree = "<group>"; };
 		50201D191A7131CF00C4442A /* PendingOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PendingOperations.h; sourceTree = "<group>"; };
@@ -443,12 +443,12 @@
 			isa = PBXGroup;
 			children = (
 				50201D8F1A71399E00C4442A /* Model.xcdatamodeld */,
-				5011E81F1A7939F900716065 /* Beacon.h */,
-				5011E8201A7939F900716065 /* Beacon.m */,
+				50130B001AC7208B002BB6BC /* Beacon.h */,
+				50130B011AC7208B002BB6BC /* Beacon.m */,
+				50130AFD1AC72067002BB6BC /* Items.h */,
+				50130AFE1AC72067002BB6BC /* Items.m */,
 				50201D261A7131CF00C4442A /* Users.h */,
 				50201D271A7131CF00C4442A /* Users.m */,
-				50201D131A7131CF00C4442A /* Items.h */,
-				50201D141A7131CF00C4442A /* Items.m */,
 				5008E92B1A7809AD00189481 /* BeaconDatabase.h */,
 				5008E92C1A7809AD00189481 /* BeaconDatabase.m */,
 			);
@@ -704,7 +704,6 @@
 				50201D331A7131CF00C4442A /* PendingUploads.m in Sources */,
 				50201D341A7131CF00C4442A /* PhotoRecord.m in Sources */,
 				50201D871A71357200C4442A /* AFURLConnectionOperation.m in Sources */,
-				50201D2F1A7131CF00C4442A /* Items.m in Sources */,
 				50201D3B1A7131D900C4442A /* AddBeaconViewController.m in Sources */,
 				5008E92D1A7809AD00189481 /* BeaconDatabase.m in Sources */,
 				50201D661A71349700C4442A /* SBJsonStreamParserAdapter.m in Sources */,
@@ -722,6 +721,7 @@
 				50201D6C1A71349700C4442A /* SBJsonUTF8Stream.m in Sources */,
 				50201D681A71349700C4442A /* SBJsonStreamWriter.m in Sources */,
 				50201D2C1A7131CF00C4442A /* CoreDataHelper.m in Sources */,
+				50130AFF1AC72067002BB6BC /* Items.m in Sources */,
 				5008034E1A766C5E00F96E5D /* EventTableViewController.m in Sources */,
 				50201D451A7133E400C4442A /* LoginViewController.m in Sources */,
 				500803571A766DAC00F96E5D /* Utility.m in Sources */,
@@ -735,6 +735,7 @@
 				50201D861A71357200C4442A /* AFSecurityPolicy.m in Sources */,
 				50201D8A1A71357200C4442A /* AFURLSessionManager.m in Sources */,
 				50201D321A7131CF00C4442A /* PendingOperations.m in Sources */,
+				50130B021AC7208B002BB6BC /* Beacon.m in Sources */,
 				50201D831A71357200C4442A /* AFHTTPRequestOperationManager.m in Sources */,
 				50201D291A7131CF00C4442A /* beaconClass.m in Sources */,
 				500541121AC6735D00761C22 /* DeleteItem.m in Sources */,
@@ -748,7 +749,6 @@
 				50201D821A71357200C4442A /* AFHTTPRequestOperation.m in Sources */,
 				50201D671A71349700C4442A /* SBJsonStreamParserState.m in Sources */,
 				5008E9221A77E7DD00189481 /* BeaconData.m in Sources */,
-				5011E8211A7939F900716065 /* Beacon.m in Sources */,
 				50201D461A7133E400C4442A /* mainTableViewController.m in Sources */,
 				50201D351A7131CF00C4442A /* scanBeaconViewController.m in Sources */,
 			);
