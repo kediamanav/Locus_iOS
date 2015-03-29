@@ -15,6 +15,15 @@
 
 @implementation UpdateBeaconViewController
 
+/* To recover the managed context object from the app delegate*/
+- (PendingUploads *)getPendingUploads{
+    PendingUploads *uploads = nil;
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    uploads = delegate.pendingOperations;
+    return uploads;
+}
+
+
 # pragma mark - on load functions
 - (void)viewDidLoad {
     self.capturedImages = [[NSMutableArray alloc] init];
@@ -226,7 +235,7 @@
     NSPredicate *filter1 = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",_user_name,self.item_name];
     [request1 setPredicate:filter1];
     
-    NSLog(@"Removing item: %@, from user %@",self.item_name,self.user_name);
+    NSLog(@"Updating item: %@, from user %@",self.item_name,self.user_name);
     
     NSError *error = nil;
     NSError *error1 = nil;
@@ -242,12 +251,14 @@
         item.item_new_name = item_name;
         item.item_description = item_description;
         item.item_lastTracked = dateTimeStamp;
-        item.item_modified = [NSNumber numberWithInt:1];
+        item.item_modified = [NSNumber numberWithInt:2];
         
-        beacon.modified = [NSNumber numberWithInt:1];
-        beacon.item_new_name = item_name;
-        
+        if(![beacon.item_name isEqualToString:item_name]){
+            beacon.modified = [NSNumber numberWithInt:2];
+            beacon.item_new_name = item_name;
+        }
         if(self.picTaken == 1){
+            NSLog(@"Pic to be updated here");
             NSData *imageData = UIImageJPEGRepresentation(self.itemImage.image, 90);
             item.item_picture = imageData;
         }
@@ -258,6 +269,22 @@
         }
         else{
             [self alertStatus:@"Beacon successfully updated!" : @"Successful"];
+        }
+        
+        NSLog(@"Beacon new item : %@",beacon.item_new_name);
+        [self startItemUploading:item];
+        if(![beacon.item_name isEqualToString:item_name]){
+            [self startBeaconUploading:beacon];
+            beacon.item_name = beacon.item_new_name;
+            beacon.item_new_name = @"";
+        }
+        
+        item.item_name = item.item_new_name;
+        item.item_new_name = @"";
+        error = nil;
+        if (![context save:&error]) {
+            NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+            [self alertStatus:[error localizedDescription]:@"Updating beacon Failed!"];
         }
     }
 }
@@ -291,9 +318,98 @@
     
     //Sends the data to the server, replace with the local database
     [self sendDataToServer: item_name : item_description];
+    self.item_name = item_name;
+    NSLog(@"Changed name");
 }
 
-- (IBAction)backPressed:(id)sender {
+
+#pragma mark - Upload item
+- (void)startItemUploading:(Items *)item {
+    ItemUploader *itemUploader = [[ItemUploader alloc] initWithItems:item delegate:self];
+    NSLog(@"INSIDE startItemUploading");
+    PendingUploads *pendings = [self getPendingUploads];
+    [pendings.uploadQueue addOperation:itemUploader];
+    NSLog(@"INSIDE startItemUploading1");
+}
+
+- (void)itemUploadDidFinish:(ItemUploader *)uploader {
     
+    NSString *item_name = uploader.item_new_name;
+    NSString *user_name = uploader.user_name;
+    BOOL success = uploader.success;
+    
+    //Update here that the item is no longer modified
+    if(success==true){
+        NSManagedObjectContext *context = [self managedObjectContext];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Items"];
+        NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",user_name,item_name];
+        [request setPredicate:filter];
+        
+        NSError *error = nil;
+        Items *item = nil;
+        item = [[context executeFetchRequest:request error:&error] lastObject];
+        
+        if(error){
+            NSLog(@"Can't execute fetch request! %@ %@", error, [error localizedDescription]);
+        }
+        if(item){
+            item.item_modified = [NSNumber numberWithInt:(int)0];
+            error = nil;
+            if (![context save:&error]) {
+                NSLog(@"Can't Update! %@ %@", error, [error localizedDescription]);
+            }
+        }
+    }
+}
+
+#pragma mark - Upload beacon
+- (void)startBeaconUploading:(Beacon *)beacon {
+    BeaconUploader *beaconUploader = [[BeaconUploader alloc] initWithItems:beacon delegate:self];
+    PendingUploads *pendings = [self getPendingUploads];
+    [pendings.uploadQueue addOperation:beaconUploader];
+}
+
+- (void)beaconUploadDidFinish:(BeaconUploader *)uploader {
+    
+    NSString *item_name = uploader.item_new_name;
+    NSString *user_name = uploader.user_name;
+    BOOL success = uploader.success;
+    
+    //Update here that the item is no longer modified
+    if(success==true){
+        NSManagedObjectContext *context = [self managedObjectContext];
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Beacon"];
+        NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",user_name,item_name];
+        [request setPredicate:filter];
+        
+        NSError *error = nil;
+        Beacon *beacon = nil;
+        beacon = [[context executeFetchRequest:request error:&error] lastObject];
+        
+        if(error){
+            NSLog(@"Can't execute fetch request! %@ %@", error, [error localizedDescription]);
+        }
+        if(beacon){
+            beacon.modified = [NSNumber numberWithInt:(int)0];
+            error = nil;
+            if (![context save:&error]) {
+                NSLog(@"Can't Update! %@ %@", error, [error localizedDescription]);
+            }
+        }
+    }
+}
+
+
+- (IBAction)backPressed:(id)sender {
+    NSLog(@"Action Pressed");
+    if(self.viewNumber==1){
+        [self performSegueWithIdentifier:@"unwindTrackView" sender:self];
+    }
+    else if(self.viewNumber==2){
+        [self performSegueWithIdentifier:@"unwindLeashView" sender:self];
+    }
+    else if(self.viewNumber==3){
+        
+    }
 }
 @end

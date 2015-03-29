@@ -11,6 +11,7 @@
 #import "EventTableViewController.h"
 #import "ActionTableViewController.h"
 #import "BeaconDatabase.h"
+#import "TrackViewController.h"
 
 @interface LeashViewController ()
 @property BeaconDatabase *beaconData;
@@ -76,6 +77,7 @@
         transferViewController.user_name = self.user_name;
         transferViewController.item_name = self.item_name;
         transferViewController.beaconImage = self.beaconImage;
+        transferViewController.viewNumber = 2;
         NSLog(@"%@", transferViewController.user_name);
     }
 }
@@ -148,6 +150,18 @@
 }
 
 
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    UINavigationController *navController = (UINavigationController *)[tabBarController.viewControllers objectAtIndex:1];
+    TrackViewController *leash = (TrackViewController *) [[navController viewControllers] objectAtIndex:0];
+    
+    leash.user_name = _user_name;
+    leash.item_name = _item_name;
+    leash.beaconImage = self.beaconImage;
+    //This will change the text of the label in controller B
+}
+
+
 - (IBAction)unwindEventSelector:(UIStoryboardSegue*)sender
 {
     EventTableViewController *eventVC = [sender sourceViewController];
@@ -164,4 +178,12 @@
 - (IBAction)editPressed:(id)sender {
     [self performSegueWithIdentifier:@"ShowEditView" sender:self];
 }
+
+- (IBAction)unwindLeashView:(UIStoryboardSegue*)sender
+{
+    UpdateBeaconViewController *updateBeacon = [sender sourceViewController];
+    self.item_name = updateBeacon.item_name;
+    self.beaconImage = updateBeacon.itemImage.image;
+}
+
 @end

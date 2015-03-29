@@ -118,75 +118,6 @@
 }
 
 
-/*
-#pragma mark - Delete item
-- (void)deleteItem:(NSString *)user_name item:(NSString *)item_name{
-    DeleteItem *itemDeleter = [[DeleteItem alloc] initWithNames:user_name item:item_name delegate:self];
-    [self.pendingOperations.uploadQueue addOperation:itemDeleter];
-}
-
-
-- (void) didFinishItemDelete:(DeleteItem *)uploader{
-    NSString *item_name = uploader.item_name;
-    NSString *user_name = uploader.user_name;
-    BOOL success = uploader.success;
-    
-    //Update here that the item is no longer modified
-    if(success==true){
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Items"];
-        
-        // For conditional fetching
-        NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",user_name,item_name];
-        [request setPredicate:filter];
-        
-        NSError *error = nil;
-        Items *item = [[_coreDataHelper.managedObjectContext executeFetchRequest:request error:&error] lastObject];
-        
-        if(error){
-            NSLog(@"Deleting item from local database failed! %@ %@", error, [error localizedDescription]);
-        }
-        if(item){
-            [_coreDataHelper.managedObjectContext deleteObject:item];
-            [_coreDataHelper saveContext];
-        }
-    }
-}
-
-
-#pragma mark - Delete beacon
-- (void)deleteBeacon:(NSString *)user_name item:(NSString *)item_name{
-    DeleteBeacon *beaconDeleter = [[DeleteBeacon alloc] initWithNames:user_name item:item_name delegate:self];
-    [self.pendingOperations.uploadQueue addOperation:beaconDeleter];
-}
-
-
-- (void) didFinishBeaconDelete:(DeleteBeacon *)uploader{
-    NSString *item_name = uploader.item_name;
-    NSString *user_name = uploader.user_name;
-    BOOL success = uploader.success;
-    
-    //Update here that the item is no longer modified
-    if(success==true){
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Beacon"];
-        
-        // For conditional fetching
-        NSPredicate *filter = [NSPredicate predicateWithFormat:@"(user_name=%@) AND (item_name=%@)",user_name,item_name];
-        [request setPredicate:filter];
-        
-        NSError *error = nil;
-        Items *item = [[_coreDataHelper.managedObjectContext executeFetchRequest:request error:&error] lastObject];
-        
-        if(error){
-            NSLog(@"Deleting beacon from local database failed! %@ %@", error, [error localizedDescription]);
-        }
-        if(item){
-            [_coreDataHelper.managedObjectContext deleteObject:item];
-            [_coreDataHelper saveContext];
-        }
-    }
-}
-*/
-
 
 #pragma mark - Upload item
 - (void)startItemUploading:(Items *)item {
@@ -333,8 +264,7 @@
     }
     [self cdh];
     //Call this to erase all the item and user data
-    //[self demo];
-    
+    [self demo];
     
     Users *user=[self checkIfUserLoggedIn];
     

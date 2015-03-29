@@ -16,6 +16,7 @@
 
 @property NSString *item_name;
 @property NSString *user_name;
+@property NSString *item_new_name;
 @property BOOL success;
 
 @property (nonatomic, assign) id <BeaconUploaderDelegate> delegate;

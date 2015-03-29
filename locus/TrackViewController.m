@@ -50,6 +50,7 @@
         transferViewController.user_name = self.user_name;
         transferViewController.item_name = self.item_name;
         transferViewController.beaconImage = self.beaconImage;
+        transferViewController.viewNumber = 1;
         NSLog(@"%@", transferViewController.user_name);
     }
 }
@@ -75,7 +76,8 @@
 {
     UpdateBeaconViewController *updateBeacon = [sender sourceViewController];
     self.item_name = updateBeacon.item_name;
-    self.beaconImage = updateBeacon.beaconImage;
+    NSLog(@"Item name is trackview %@",self.item_name);
+    self.beaconImage = updateBeacon.itemImage.image;
 }
 
 @end

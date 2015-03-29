@@ -349,7 +349,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Z5-VP-ed8" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="SiO-Vb-L7f" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3525.5" y="2041.5"/>
+            <point key="canvasLocation" x="3433.5" y="2033.5"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="eW0-DA-IDJ">
@@ -1068,8 +1068,7 @@ FlNjYW5uaW5nIGZvciBiZWFjb24gLi4uA
                     <navigationItem key="navigationItem" title="Locus" id="ulx-Gg-9qo">
                         <barButtonItem key="leftBarButtonItem" title="Back" id="DqG-Nn-ThM">
                             <connections>
-                                <action selector="backPressed:" destination="JCT-ud-v9p" id="MiL-Ft-9XS"/>
-                                <segue destination="15c-fX-zhq" kind="unwind" unwindAction="unwindTrackView:" id="f8E-sU-EHx"/>
+                                <action selector="backPressed:" destination="JCT-ud-v9p" id="zr4-eL-JaM"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1078,6 +1077,8 @@ FlNjYW5uaW5nIGZvciBiZWFjb24gLi4uA
                         <outlet property="itemDescription" destination="vh4-pD-ydZ" id="sDR-T0-2xQ"/>
                         <outlet property="itemImage" destination="nev-IF-qp0" id="q6C-pZ-dRi"/>
                         <outlet property="itemName" destination="crg-Wc-1yR" id="hhS-6C-M3S"/>
+                        <segue destination="15c-fX-zhq" kind="unwind" identifier="unwindTrackView" unwindAction="unwindTrackView:" id="33r-Oa-xPf"/>
+                        <segue destination="15c-fX-zhq" kind="unwind" identifier="unwindLeashView" unwindAction="unwindLeashView:" id="NHo-X3-pfs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MBN-xl-mu2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1114,7 +1115,7 @@ FlNjYW5uaW5nIGZvciBiZWFjb24gLi4uA
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ZNE-1R-JRg"/>
-        <segue reference="UTe-Ko-XX6"/>
+        <segue reference="Fdd-gu-fes"/>
         <segue reference="3kD-aQ-xF1"/>
     </inferredMetricsTieBreakers>
 </document>

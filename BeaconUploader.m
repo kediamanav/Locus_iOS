@@ -30,6 +30,7 @@
         self.beacon = userBeacon;
         self.item_name = userBeacon.item_name;
         self.user_name = userBeacon.user_name;
+        self.item_new_name = userBeacon.item_new_name;
         self.success = false;
     }
     return self;
@@ -46,14 +47,14 @@
 -(void)main{
     @autoreleasepool {
         
-        NSLog(@"Inside the threaded function");
+        NSLog(@"Inside the threaded function, old value : %@, new value :%@",self.item_name,self.item_new_name);
         
         //Creating the key-value pair arrays to hold the post data
         //NSArray *keys = [[NSArray alloc] initWithObjects:@"user_name",@"item_name",@"uuid",@"major",@"minor",@"event",@"action",@"message", nil];
         //NSArray *vals = [[NSArray alloc] initWithObjects:_beacon.user_name,_beacon.item_name, _beacon.uuid, _beacon.major, _beacon.minor, _beacon.event, _beacon.action, _beacon.message , nil];
         //NSLog(@"%@ %@ %@ %ld %ld %ld %ld %@", _beacon.user_name,_beacon.item_name,_beacon.uuid, (long)[_beacon.major integerValue],(long)[_beacon.minor integerValue],(long)[_beacon.event integerValue],(long)[_beacon.action integerValue], _beacon.message);
         
-        NSString *post =[[NSString alloc] initWithFormat:@"user_name=%@&item_name=%@&uuid=%@&major=%ld&minor=%ld&event=%ld&action=%ld&message=%@&item_new_name=%@",_beacon.user_name,_beacon.item_name,_beacon.uuid, (long)[_beacon.major integerValue],(long)[_beacon.minor integerValue],(long)[_beacon.event integerValue],(long)[_beacon.action integerValue], _beacon.message, _beacon.item_new_name];
+        NSString *post =[[NSString alloc] initWithFormat:@"user_name=%@&item_name=%@&uuid=%@&major=%ld&minor=%ld&event=%ld&action=%ld&message=%@&item_new_name=%@",_beacon.user_name,self.item_name,_beacon.uuid, (long)[_beacon.major integerValue],(long)[_beacon.minor integerValue],(long)[_beacon.event integerValue],(long)[_beacon.action integerValue], _beacon.message, self.item_new_name];
         NSLog(@"PostData: %@",post);
         NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
         NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];

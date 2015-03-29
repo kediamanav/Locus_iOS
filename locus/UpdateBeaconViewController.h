@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #include "SBJson.h"
 
-@interface UpdateBeaconViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIActionSheetDelegate>
+@interface UpdateBeaconViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIActionSheetDelegate, ItemUploaderDelegate, BeaconUploaderDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *itemImage;
 - (IBAction)editButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UITextField *itemName;
@@ -28,7 +28,10 @@
 @property UITextField *activeField;
 @property UITextView *activeView;
 
-@property UIActionSheet* attachmentMenuSheet;
+@property int viewNumber;
 
+@property (nonatomic, strong) PendingUploads *pendingUploads;
+
+@property UIActionSheet* attachmentMenuSheet;
 
 @end

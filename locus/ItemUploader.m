@@ -30,6 +30,7 @@
         self.item = userItem;
         self.item_name = _item.item_name;
         self.user_name = _item.user_name;
+        self.item_new_name = userItem.item_new_name;
         self.success = false;
     }
     return self;
@@ -50,7 +51,7 @@
         
             //Creating the key-value pair arrays to hold the post data
             NSArray *keys = [[NSArray alloc] initWithObjects:@"user_name",@"item_name",@"item_DOB",@"item_lastTracked",@"item_description",@"item_eLeashRange",@"item_isLost",@"item_eLeashOn",@"item_macAddress",@"item_new_name" ,nil];
-            NSArray *vals = [[NSArray alloc] initWithObjects:_item.user_name,_item.item_name, _item.item_DOB, _item.item_lastTracked, _item.item_description, _item.item_eLeashRange, _item.item_isLost, _item.item_eLeashOn , _item.item_macAddress,_item.item_new_name ,nil];
+            NSArray *vals = [[NSArray alloc] initWithObjects:_item.user_name,self.item_name, _item.item_DOB, _item.item_lastTracked, _item.item_description, _item.item_eLeashRange, _item.item_isLost, _item.item_eLeashOn , _item.item_macAddress,self.item_new_name ,nil];
             
             // NSString *post =[[NSString alloc] initWithFormat:@"user_name=%@&item_name=%@&item_DOB=%@&item_lastTracked=%@&item_description=%@&item_eLeashRange=%ld&item_isLost=%ld&item_eLeashOn=%ld&item_macAddress=%@",_user_name,item_name, dateTimeStamp, dateTimeStamp, item_description, (long)range, (long)isLost, (long)eLeashOn, _macAddress];
             //NSLog(@"PostData: %@",post);
@@ -75,8 +76,12 @@
                 
                 NSString *imageName= _item.user_name;
                 imageName = [imageName stringByAppendingString:@"_"];
-                imageName = [imageName stringByAppendingString:_item.item_name];
-                
+                if(![self.item_new_name isEqualToString:@""]){
+                    imageName = [imageName stringByAppendingString:self.item_new_name];
+                }
+                else{
+                    imageName = [imageName stringByAppendingString:_item.item_name];
+                }
                 [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
                 [body appendData:[[NSString stringWithFormat:@"Content-Disposition: attachment; name=\"imageFile\"; filename=\"%@.jpg\"\r\n", imageName] dataUsingEncoding:NSASCIIStringEncoding]];
                 [body appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
