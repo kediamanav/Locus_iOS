@@ -28,6 +28,8 @@
 @implementation LoginViewController
 
 UIGestureRecognizer *tapper;
+@synthesize b_login;
+
 bool keyboardIsShown;
 
 -(IBAction)unwindToLogin:(UIStoryboardSegue *)segue{
@@ -100,6 +102,10 @@ bool keyboardIsShown;
     //make contentSize bigger than your scrollSize (you will need to figure out for your own use case)
     CGSize scrollContentSize = CGSizeMake(300, 150);
     self.scrollView.contentSize = scrollContentSize;
+    
+    b_login.layer.cornerRadius = 2;
+    b_login.layer.borderWidth = 1;
+    b_login.layer.borderColor = [UIColor blueColor].CGColor;
     
     //tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     //tapper.cancelsTouchesInView = NO;
